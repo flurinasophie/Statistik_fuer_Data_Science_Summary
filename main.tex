@@ -923,6 +923,36 @@ $\rightarrow$ simuliert wiederholte Stichproben aus der vorhandenen Stichprobe s
     \includegraphics[width=\textwidth]{img/BootstrapVergleich.png}
 \end{figure}
 
+\subsection{Margin of Error}
+Wenn eine Stichprobe verwendet wird, um einen Parameter der Population, wie den Anteil oder den Mittelwert, zu schätzen, ist diese Schätzung immer mit Unsicherheiten verbunden. Der Margin of Error quantifiziert diese Unsicherheit, indem er einen Bereich um die Schätzung angibt, der wahrscheinlich den tatsächlichen Wert enthält.\\
+Der Margin of Error hängt von mehreren Faktoren ab:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Stichprobengröße ($n$)}: Je größer die Stichprobe, desto kleiner der MoE, weil die Schätzung genauer wird.
+    \item \textbf{Stichprobenfehler ($\sigma$ oder $p$)}: Die Streuung der Daten beeinflusst den MoE.
+    \item \textbf{Konfidenzniveau ($1-\alpha$)}: Das ist die Wahrscheinlichkeit, mit der der wahre Wert im angegebenen Bereich liegt. Typische Werte sind 90\%, 95\% oder 99\%.
+\end{itemize}
+Die allgemeine Formel für den Margin of Error bei einem Mittelwert lautet:\\
+$MoE = z_{\alpha/2} \times \frac{\sigma}{\sqrt{n}}$\\
+Hierbei ist:\\
+$\rightarrow$ $z_{\alpha/2}$ der kritische Wert aus der Standardnormalverteilung, der vom gewünschten Konfidenzniveau abhängt (z.\,B. ca. 1{,}96 für 95\%).\\
+$\rightarrow$ $\sigma$ die Standardabweichung der Population (bei unbekannter $\sigma$ wird die Stichprobenstandardabweichung verwendet).\\
+Bei Anteils-Schätzungen (z.\,B. Prozentsätzen) lautet die Formel:\\
+$MoE = z_{\alpha/2} \times \sqrt{\frac{p(1-p)}{n}}$,
+wobei $p$ der geschätzte Anteil ist.
+
+\subsection{Standardabweichung vs. Standardfehler}
+\textbf{SD}: Wie stark streuen die Daten innerhalb einer Stichprobe?\\
+$\rightarrow$ Datenebene\\
+$\rightarrow$ beschreibt die Variabilität in deiner Stichprobe\\
+\textbf{SE}: Wie stark streut ein Schätzer (z. B. der Mittelwert) zwischen verschiedenen Stichproben?\\
+$\rightarrow$ Schätzer\\
+$\rightarrow$ beschreibt die Unsicherheit deiner Schätzung, also die Streuung von $\bar{X}$ oder $\hat{p}$ über viele gedachte Stichproben.
+
+
+
+
+
+
 
 
 

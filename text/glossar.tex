@@ -244,9 +244,38 @@ $\rightarrow$ PDF: Probability Density Function (Wahrscheinlichkeitsdichtefunkti
 PDF: Probability Density Function (Wahrscheinlichkeitsdichtefunktion): $f(x) \ge 0 \quad \text{und} \quad \int f(x)\,dx = 1$\\
 CDF: Cumulative Distribution Function (Kumulative Verteilungsfunktion): $F(x) = Pr(X \le x) = \int_{-\infty}^{x} f(z)\,dz$
 
+\section{Schätzen \& Konfindenzintervalle}
 
+\subsection{Population}
+die Gesamtheit, über die du etwas wissen willst.\\
+Sie hat feste, aber unbekannte Kennzahlen = Parameter:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item Mittelwert: $\mu$
+  \item Varianz: $\sigma^2$
+  \item Anteil / Wahrscheinlichkeit: $\rho$
+\end{itemize}
 
-
+\subsection{Stichprobe}
+die Teilmenge, die du tatsächlich misst/befragst.\\
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item Größe der Stichprobe: n
+  \item Zufallsvariablen: $X_1,..., X_n$ (jede Beobachtung als Zufallsvariable gedacht).
+  \item Schätzer:
+  \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $\bar{X}$ = Zufallsvariable „Stichprobenmittelwert“
+    \item $\hat{p}$ = Zufallsvariable „Stichprobenanteil“
+    \item Allgemein: $T(X_1,..., X_n)$
+  \end{itemize}
+  \item Schätzwert (konkrete Zahlen)
+  \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $\bar{x}$ = beobachteter Mittelwert
+    \item $\hat{p}$ (gleiches Symbol, aber konkrete Zahl aus deiner Stichprobe)
+    \item t = konkreter Wert des Schätzers T nach Einsetzen der Daten
+  \end{itemize}
+\end{itemize}
+\textbf{Großbuchstaben} $\rightarrow$ Zufallsvariablen (theoretisch, „über viele Stichproben“ gedacht).\\
+\textbf{Kleinbuchstaben} $\rightarrow$ Konkrete Beobachtungen aus einer Stichprobe.\\
+Ideal: zufällig, unabhängig, repräaentativ
 
 
 
