@@ -1,0 +1,264 @@
+\section{Glossar}
+
+\subsection{Lagekennzahlen}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{Mittelwert ($\bar{x}$)}: Summe aller Werte geteilt durch Anzahl.\\Eigenschaften: linear, effizient, aber \textbf{ausreißerempfindlich}
+  \item \textbf{Median ($Q_{0.5}$)}: 50\%-Quantil: teilt Daten in zwei gleich große Hälften.\\Minimiert die Summe absoluter Abweichungen, \textbf{robust gegen Ausreißer}.\\Typisch besser bei schiefen Verteilungen (z. B. Einkommen, Wartezeiten)
+  \item \textbf{Getrimmter Mittelwert}: Entfernt einen Prozentsatz der kleinsten und größten Werte (z. B. je 10 \%).\\ Kompromiss: mittelt wie das Mean, aber \textbf{robuster}.\\Unterschied zur Winsorisierung: dort werden Extremwerte nicht entfernt, sondern auf den nächstinneren Wert gesetzt 
+  \item \textbf{Modus}: Am häufigsten vorkommender Wert. Besonders wichtig für \textbf{kategoriale Daten}. \\Hinweis auf Multimodalität (mehrere Peaks $\rightarrow$ mögliche Subgruppen oder Mischverteilungen) 
+  \item \textbf{Quantile und Perzentile}: Werte, die Daten in gleich große Teile teilen (z. B. Quartile = 4 Teile).\\ Basis für den \textbf{Interquartilsabstand (IQR)}, nützlich bei schiefen Verteilungen.
+Quantile sind \textbf{robuste Maße}.
+\end{itemize}
+
+\subsection{Streuungskennzahlen}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{Varianz ($s^2$)}: Durchschnitt der quadrierten Abweichungen vom Mittelwert: $s^2 = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})^2$\\
+  \textbf{quadriert} $\rightarrow$ schwer interpretierbar, \textbf{ausreißerempfindlich}
+  \item \textbf{Standardabweichung (SD, $s$)}: Quadratwurzel der Varianz\\ Einheit = wie Originaldaten $\rightarrow$ \textbf{leichter interpretierbar}, \textbf{ausreißerempfindlich}
+  \item \textbf{Range (Spannweite)}: Differenz zwischen Maximum und Minimum\\
+  Extrem anfällig für Ausreißer → selten als zentrales Maß genutzt
+  \item \textbf{Interquartilsabstand (IQR)}: Differenz zwischen dem dritten und dem ersten Quartil: $IQR = Q_3 - Q_1$ \\ $\rightarrow$ misst die mittleren 50 \% der Daten\\ Robust gegenüber wenigen Extremwerten\\ \textbf{Immer zusammen mit Median berichten} (empfohlen bei schiefen Verteilungen)
+  \item \textbf{Mittlere absolute Abweichung (MAD – Median Absolute Deviation)}: Median der Abstände der Werte zum Median: $MAD = \text{Median}(|x_i - \tilde{x}|)$\\ Sehr robust, auch bei Schiefe und Heavy Tails\\Wird oft skaliert mit Faktor \textbf{1.4826}, um auf die gleiche Skala wie SD zu kommen (bei Normalverteilung)\\Nutzt den Median statt Mean $\rightarrow$ stabil bei Ausreißern
+\end{itemize}
+
+\subsection{Ausreisser}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{Ausreisser}: Werte, die signifikant vom Rest der Daten abweichen. Sie können Messfehler, Eingabefehler oder seltene, aber valide Beobachtungen sein.
+  \item \textbf{Tukey Fences}: Eine einfache und \textbf{robuste} Methode zur Identifizierung von Ausreisserkandidaten basierend auf dem IQR. Werte, die unter $Q_1 - 1.5 \cdot IQR$ oder über $Q_3 + 1.5 \cdot IQR$ liegen, gelten als Ausreisser.
+  \item \textbf{Modifizierter Z-Score}: Eine \textbf{robuste} Alternative zum klassischen Z-Score, die den Median und die MAD anstelle des Mittelwerts und der Standardabweichung verwendet. Besser geeignet für schiefe Verteilungen.
+\end{itemize}
+
+\subsection{Histogramm}
+\noindent
+\begin{minipage}{0.48\textwidth}
+Ein Diagramm, das die Häufigkeitsverteilung von Daten durch rechteckige Säulen darstellt. Jede Säule repräsentiert die Häufigkeit (oder Dichte) von Werten in einem bestimmten Intervall (\textbf{Bin}).\\ $f_j = \frac{c_j}{n \cdot h}$ \\$c_j = \text{Anzahl der Werte im Intervall}$ \\$n = \text{Gesamtzahl der Werte}$ \\$h = \text{Breite des Intervalls}$
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{img/histogramm.png}
+    \vspace{-0.5em}
+\end{minipage}
+$~~$\\
+\textbf{Bin-Wahl}: Die Entscheidung für die Breite der Intervalle (Bins) in einem Histogramm. Eine falsche Wahl kann die Interpretation verzerren. Regeln wie die \textbf{Freedman-Diaconis-Regel (FD)} helfen, eine optimale Bin-Breite zu finden.
+
+\subsection{Kernel Density Estimation (KDE)}
+Methode zur Schätzung der Wahrscheinlichkeitsdichtefunktion einer Zufallsvariable. Erzeugt (summiert) eine glatte, kontinuierliche Kurve ohne diskrete Bins. \\ $\hat{f}(x) = \frac{1}{n h} \sum_{i=1}^n K\left(\frac{x - x_i}{h}\right)$, h = Bandbreite
+  \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Kleine Bandbreite: viele Details, evtl. Rauschen
+    \item Große Bandbreite: glatt, aber Details verschwinden
+\end{itemize}
+$\rightarrow$ \textbf{Scott-Regel}: gut für normalverteilte Daten\\
+$\rightarrow$ \textbf{Silverman-Regel}: robuster bei schiefen Daten\\
+\textbf{Bandbreite ($h$)}: Schlüsselparameter bei der KDE, der die Glättung der Kurve steuert. Kleine Bandbreite → zackige Kurve; grosse Bandbreite → zu stark geglättet.
+
+\subsection{Boxplot}
+Darstellung, die eine Verteilung durch fünf Kennzahlen zusammenfasst: Minimum, erstes Quartil ($Q_1$), Median, drittes Quartil ($Q_3$), Maximum (oft mit Whisker, die Ausreisser ausschliessen). Bietet Überblick über Lage, Streuung und Ausreisser.\\ Robuste Kennzahlen:\\
+\noindent
+\begin{minipage}{0.48\textwidth}
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item \textbf{Median} (dicke Linie in der Box)
+        \item \textbf{Box} = Interquartilsabstand (Q1 bis Q3)
+        \item \textbf{Whisker}: reichen bis zu 1.5 × IQR über Q1/Q3 hinaus
+        \item \textbf{Punkte außerhalb} = Ausreißer-Kandidaten
+        \item Punkte außerhalb = Ausreißer-Kandidaten
+        \item Log-Skala: sinnvoll bei stark schiefen Daten
+        \item whis-Parameter: alternativ zu 1.5 × IQR z. B. Perzentile (5–95 \%)
+    \end{itemize}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{img/boxplot.png}
+    \vspace{-0.5em}
+\end{minipage}
+
+\subsection{Violinplot}
+\noindent
+\begin{minipage}{0.48\textwidth}
+Kombination aus Boxplot und KDE. Die Form zeigt die Dichtefunktion, während innere Markierungen (z. B. Kästen, Linien) die Quartile und den Median zeigen. Nützlich für Gruppenvergleiche.\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=0.75\linewidth]{img/violinplot1.png}\\
+    \centering
+    \includegraphics[width=0.75\linewidth]{img/violinplot2.png}
+    \vspace{-0.5em}
+\end{minipage}
+
+\subsection{Strip- und Swarmplots}
+Visualisieren individuelle Rohdatenpunkte. Ergänzen Box- oder Violinplots, um die tatsächliche Verteilung der Punkte zu zeigen.
+
+\subsection{ECDF und QQ-Plot}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{Empirical Cumulative Distribution Function (ECDF)}: Binfreie und vollständige Darstellung der kumulativen Verteilung. Zeigt für jeden Wert den Anteil der Daten $\leq$ diesem Wert. Sehr informativ, auch bei kleinen Datensätzen. Erlaubt direktes Ablesen von Quantilen.
+  \item \textbf{Quantile-Quantile Plot (QQ-Plot)}: Diagramm, das die Quantile einer Stichprobe gegen die Quantile einer theoretischen Verteilung (z. B. Normalverteilung) aufträgt. Punkte auf einer Geraden → Verteilungen stimmen überein. Abweichungen zeigen \textbf{Schiefe} oder \textbf{schwere Tails}.
+  \item \textbf{Schwere Tails (Heavy Tails)}: Eigenschaft einer Verteilung, bei der die Wahrscheinlichkeit für extreme Werte höher ist als bei einer Normalverteilung. Im QQ-Plot sichtbar durch Krümmung an den Enden.
+\end{itemize}
+
+\subsection{Korrelation}
+Korrelation beschreibt, wie stark und in welche Richtung zwei Variablen miteinander zusammenhängen. \\Sie misst, ob Veränderungen in einer Variable systematisch mit Veränderungen in einer anderen einhergehen.\\
+\textit{„Ändert sich Y, wenn sich X ändert – und falls ja, in welche Richtung und wie stark?“}
+
+\subsection{Zusammenhang}
+Ein Zusammenhang besteht, wenn sich Änderungen in X mit \textbf{systematischen Änderungen} in Y koppeln.
+
+\subsection{Kausalität}
+Es besteht eine eindeutige Ursache-Wirkungs-Beziehung zwischen zwei Variablen. Es liegt also eine Kausalität vor, wenn Handlung A das Ergebnis B verursacht.
+
+\subsection{Linear}
+Beziehung $\approx$ Gerade $\rightarrow$ Steigung konstant. $Y \approx a + bX$
+
+\subsection{Monoton}
+$Y$ steigt oder fällt durchgehend, aber evtl. nicht linear (Steigung kann sich ändern, z. B. S-förmig, konkav, etc.)
+
+\subsection{Kovarianz}
+Misst, wie stark zwei Variablen gemeinsam variieren.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item Wenn hohe $x_i$ mit hohen $y_i$ einhergehen $\rightarrow$ \textbf{positiver Zusammenhang}
+  \item Wenn hohe $x_i$ mit niedrigen $y_i$ einhergehen $\rightarrow$ \textbf{negativer Zusammenhang}
+  \item Wenn kein systematisches Muster $\rightarrow$ \textbf{kein linearer Zusammenhang}
+\end{itemize}
+$\text{Cov}(X,Y) = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})$\\
+\textbf{Vorzeichen = Richtung, Betrag = Stärke der gemeinsamen Streuung}
+
+\subsection{Visualisierung von Korrelationen}
+
+\subsubsection{Scatterplot}
+Der Scatterplot (Streudiagramm) ist das wichtigste Werkzeug für \textbf{bivariate Zusammenhänge}.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Jeder Punkt = eine Beobachtung ($x_i, y_i$)
+    \item Muster der Punkte zeigt:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Steigend $\rightarrow$ positiver Zusammenhang
+        \item Fallend $\rightarrow$ negativer Zusammenhang
+        \item Wolke ohne Trend $\rightarrow$ kein linearer Zusammenhang
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+        \centering
+        \includegraphics[width=0.75\linewidth]{img/ScatterplotG.png}
+\end{figure}
+
+\subsubsection{Heatmap – Korrelationsmatrix}
+\noindent
+\begin{minipage}{0.48\textwidth}
+\begin{figure}[H]
+     \centering
+    \includegraphics[width=0.8\linewidth]{img/Heatmap.png}
+\end{figure}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+Heatmaps visualisieren viele Korrelationen gleichzeitig.
+   \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+                \item Matrix aus Korrelationswerten (r-Werte) aller Variablenpaare
+        \item Farben kodieren Stärke \& Richtung:
+        \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+            \item Rot: positiver Zusammenhang
+            \item Blau: negativer Zusammenhang
+            \item Weiß/hell: nahe 0 $\rightarrow$ kein Zusammenhang
+        \end{itemize}
+    \end{itemize}
+    ACHTUNG: Die Farbskala kann täuschen! Kontext beachten (0.3 kann in Soziologie stark, in Physik schwach sein)
+\end{minipage}
+
+\subsection{Pairplot}
+Kombiniert Scatterplots und univariate Histogramme für viele Variablen.\\
+\noindent
+\begin{minipage}{0.48\textwidth}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Diagonal: Histogramme (Einzelverteilungen)
+    \item Off-Diagonal: Scatterplots (Paarvergleiche)
+    \item Erkennt:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    	\item Cluster
+    	\item Nichtlinearität
+    	\item Ausreißer
+    \end{itemize}
+\end{itemize}
+Sehr nützlich für erste explorative Analysen (EDA)!
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{figure}[H]
+     \centering
+    \includegraphics[width=1\linewidth]{img/Pairplot.png}
+\end{figure}
+\end{minipage}
+
+\subsection{Jointplot}
+Der Jointplot zeigt die Beziehung zweier Variablen + ihre Randverteilungen.\\
+\noindent
+\begin{minipage}{0.40\textwidth}
+\begin{figure}[H]
+     \centering
+    \includegraphics[width=1\linewidth]{img/Jointplot.png}
+\end{figure}
+\end{minipage}\hfill
+\begin{minipage}{0.56\textwidth}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item Zentrum: Scatterplot mit Regressionslinie
+  \item Ränder: Histogramme der einzelnen Variablen
+  \item Optional kind="kde" → zeigt Dichtekonturen statt Punkte
+\end{itemize}
+$\rightarrow$ Effizient für 2 Variablen mit zusätzlichem Verteilungsüberblick.
+\end{minipage}
+
+\subsection{Wahrscheinlichkeit \& Verteilungen}
+
+\subsubsection{Ergebnis}
+Ein mögliches Resultat eines Zufallsexperiments
+
+\subsubsection{Ereignis}
+Menge von Ergebnissen
+
+\subsubsection{Ereignisraum $\Omega$}
+Menge aller möglichen Ergebnisse
+
+\subsubsection{Diskrete Zufallsvariablen}
+= Summen\\
+\noindent
+\begin{minipage}{0.56\textwidth}
+(Nominal, Ordinal): endliche oder zählbare Werte (z. B. Augenzahl, Klicks, Fehler)\\
+$\rightarrow$ PMF: Probability Mass Function (Wahrscheinlichkeitsfunktion)
+\end{minipage}\hfill
+\begin{minipage}{0.40\textwidth}
+\begin{figure}[H]
+     \centering
+    \includegraphics[width=1\linewidth]{img/DiskreteZufallsvariable.png}
+\end{figure}
+\end{minipage}
+
+\subsubsection{Kontinuierliche Zufallsvariablen}
+= I
+\noindent
+\begin{minipage}{0.56\textwidth}
+(Intervall, Ratio): beliebige reelle Werte (z. B. Messungen, Zeit, Temperatur)\\
+$\rightarrow$ PDF: Probability Density Function (Wahrscheinlichkeitsdichtefunktion)
+\end{minipage}\hfill
+\begin{minipage}{0.40\textwidth}
+\begin{figure}[H]
+     \centering
+    \includegraphics[width=1\linewidth]{img/KontinuierlicheZufallsvariable.png}
+\end{figure}
+\end{minipage}
+
+\subsubsection{Wahrscheinlichkeitsdichte PDF und Verteilungsfunktion CDF}
+PDF: Probability Density Function (Wahrscheinlichkeitsdichtefunktion): $f(x) \ge 0 \quad \text{und} \quad \int f(x)\,dx = 1$\\
+CDF: Cumulative Distribution Function (Kumulative Verteilungsfunktion): $F(x) = Pr(X \le x) = \int_{-\infty}^{x} f(z)\,dz$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

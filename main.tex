@@ -1,0 +1,957 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{left = 1.5cm, right = 1.5cm, top = 1.5cm, bottom = 2cm}
+%\setcounter{tocdepth}{4}
+\usepackage[onehalfspacing]{setspace} 
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{pifont}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage[
+   colorlinks,% Links ohne Umrandungen in zu wählender Farbe
+   linkcolor=black,   % Farbe interner Verweise
+   filecolor=black,   % Farbe externer Verweise
+   citecolor=black% Farbe von Zitaten
+]{hyperref}
+\usepackage{float} 
+\usepackage{ragged2e} %%blocksatz \justifing
+\usepackage{minted}
+\usepackage[ngerman]{babel}
+\usepackage[babel,german=guillemets]{csquotes}
+\usepackage[backend=biber, style=apa]{biblatex}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, positioning}
+\usepackage{stmaryrd}
+\usepackage{enumitem}
+\usepackage{pdfpages}
+\DeclareLanguageMapping{german}{german-apa}
+\newcommand{\showfontsize}{{\f@size pt}}
+\addbibresource{literatur.bib}
+\setlength{\bibitemsep}{1em}
+%\setlist[itemize,1]{label=•, itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft}
+%\setlist[itemize,2]{label=•, itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=1.5em}
+%\setlist[itemize,3]{label=•, itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=2.5em}
+
+
+\begin{document}
+\justifying
+
+\begin{center}
+\LARGE Statistik für Data Science\\[1em]
+\large Flurina Sophie Baumbach\\[0.5em]
+\normalsize Sep 15, 2025
+\end{center}
+
+\renewcommand{\contentsname}{Inhaltsverzeichnis}
+
+
+\tableofcontents\newpage
+
+\newpage
+
+\section{Daten}
+
+\subsection{Datentypen \& Messniveaus}
+Statistik hängt vom Datentyp ab - Unterschiedliche Methoden für verschiedene Skalen
+
+\subsubsection{Nominalskala}
+\textbf{kategorisch, keine Ordnung}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Niedrigster Informationsgehalt
+    \item Nominalskalierte Daten lassen sich weder in eine logische Reihenfolge sortieren, noch quantitativ differenzieren
+    \item Merkmalsausprägungen zweier Merkmale lassen sich also lediglich in Gleichheit oder Ungleichheit unterscheiden (A $\not=$ B)
+    \item Werte sind reine Namen / Kategorien, \textbf{keine Reihenfolge, keine Abstände}
+    \item Beispiele: Geschlecht, Postleitzahl, HTTP-Statuscode
+\end{itemize}
+
+\subsubsection{Ordinalskala}
+\textbf{kategorisch, mit Ordnung}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Ordnet Variablen mit Ausprägungen in eine klare Rangfolge
+    \item Die Abstände zwischen den einzelnen Rängen sind nicht interpretierbar, da sie nicht quantifiziert sind
+    \item Beispiele: Schulnoten, Star Ratings
+\end{itemize}
+
+\subsubsection{Intervallskala}
+\textbf{metrisch, ohne echten Nullpunkt}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Es lassen sich Reihenfolgen und quantifizierbare Abstände bilden
+    \item Sie liegt beim Skalenniveau ebenfalls über der Nominalskala und der Ordinalskala
+    \item kein absoluter/natürlicher Nullpunkt (Verhältnisse („doppelt so viel“) ergeben keinen Sinn)
+    \item Beispiele: Temperatur in Celsius, Zeit
+\end{itemize}
+
+\subsubsection{Ratioskala}
+\textbf{metrisch, mit absolutem Nullpunkt}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Es lassen sich sowohl Reihenfolgen als auch quantifizierbare Abstände bilden
+    \item Alle Eigenschaften der Intervallskala + natürlicher Nullpunkt $\rightarrow$ Verhältnisse sind sinnvoll
+    \item Beispiele: Alter in Jahren, RAM-Größe, Gewicht, Einkommen
+\end{itemize}
+
+\subsection{Bias in Daten}
+\textbf{Bias = systematische Verzerrung in Daten
+oder Analyse}
+
+\subsubsection{Sampling Bias}
+Entsteht, wenn die Stichprobe nicht repräsentativ für die gesamte Population ist
+
+\subsubsection{Survivorship Bias}
+Entsteht, wenn man nur die „Überlebenden“ einer Gruppe betrachtet und dadurch die Analyse verzerrt wird\\
+$\rightarrow$ Man übersieht die Fälle, die nicht mehr da sind – und genau die enthalten oft die wichtigste Information
+
+\subsubsection{Confirmation Bias}
+Man sucht nur nach Informationen, die die eigene Hypothese oder Erwartung bestätigen und widersprechende Daten werden ignoriert oder abgewertet
+
+\subsubsection{Publication Bias}
+Es werden nur „positive“ oder „signifikante“ Ergebnisse veröffentlicht, während neutrale oder negative Resultate in der Schublade verschwinden $\Rightarrow$ verzerrtes Bild in der Wissenschaft oder Praxis
+
+\subsubsection{Measurement Bias}
+Entsteht, wenn die Messungen selbst systematisch fehlerhaft oder verzerrt sind $\rightarrow$ Es liegt also nicht an der Stichprobe oder Veröffentlichung, sondern an der Art und Weise, wie Daten erfasst werden
+
+\subsection{Missing Values}
+
+\subsubsection{MCAR – Completely at
+Random}
+M\textbf{C}AR: \textbf{C}ompletely = Chaos, reiner Zufall
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Fehlende Werte treten \textbf{völlig zufällig} auf
+    \item Es gibt keinen Zusammenhang mit beobachteten Variablen oder mit dem wahren Wert selbst
+    \item Kein Bias $\rightarrow$ die Daten bleiben repräsentativ (Man darf die fehlenden Werte ignorieren oder simpel (ggf. durch den Median) ersetzen)
+\end{itemize}
+
+\subsubsection{MAR – At Random}
+M\textbf{AR}: \textbf{A}t \textbf{R}andom" = Abhängig von Anderen (beobachteten) Variablen
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Fehlende Werte hängen \textbf{nicht vom wahren Wert selbst} ab, sondern \textbf{von anderen beobachteten Variablen}
+    \item Das Fehlen ist also nicht völlig zufällig, sondern erklärbar durch bekannte Informationen
+    \item MAR-Daten sind modellierbar $\rightarrow$ man kann fortgeschrittene Imputationsmethoden nutzen, z.B. gruppenweise Mittelwert/Median, MICE (Multiple Imputation by Chained Equations) oder KNN-Imputation (K-Nearest Neighbors)
+\end{itemize}
+
+\subsubsection{MNAR – Not at Random}
+M\textbf{N}AR: \textbf{N}ot Random = Nicht zufällig, systematisches Problem
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Das Fehlen hängt direkt vom wahren Wert selbst ab
+    \item Menschen oder Systeme „verstecken“ bestimmte Werte systematisch $\rightarrow$ also nicht zufällig, nicht durch andere Variablen erklärbar, sondern abhängig von der fehlenden Größe selbst
+    \item Klassische Imputation (Mittelwert, Median) führt zu Verzerrungen $\rightarrow$ man braucht spezielle Modelle oder Expertenwissen / Domain Knowledge
+\end{itemize}
+
+\subsubsection{Lösungsansätze}
+\begin{tabular}{|c|p{4cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{\%} & \textbf{MCAR} & \textbf{MAR} & \textbf{MNAR} \\
+\hline
+$<$ 5\% & Löschen OK & Gruppenweise Imputation & Expertenwissen (z.\,B. Arzt) \\
+\hline
+5--20\% & Multiple Imputation & MICE / KNN & Selection Models (z.\,B. Heckman) \\
+\hline
+$>$ 20\% & Multiple Imputation & MICE + Sensitivity & Explizite Modellierung (Warum?) \\
+\hline
+\end{tabular}
+
+\subsubsection{Strategie - Median / Mean Imputation}
+Fehlende Werte werden durch den Mittelwert oder Median der vorhandenen Werte ersetzt\\
+$\rightarrow$ Vorteile: Sehr einfach und schnell, gut, wenn nur wenige Werte fehlen (< 5 \%) - wird bei MCAR verwendet\\
+$\rightarrow$ Nachteile: Unterschätzt die Varianz $\rightarrow$ Daten wirken zu gleichmäßig, kann Zusammenhänge zwischen Variablen verzerren und ignoriert Unsicherheit (alle fehlenden bekommen denselben Wert)
+
+\subsubsection{Strategie - Gruppenweise Imputation}
+Fehlende Werte werden \textbf{nicht global}, sondern \textbf{innerhalb von Untergruppen} ersetzt $\rightarrow$ Man teilt die Daten nach einer Gruppenvariablen (z. B. Geschlecht, Region, Altersklasse) auf und imputiert gruppenweise den Median oder Mittelwert\\
+$\rightarrow$ Vorteile: Berücksichtigt strukturelle Unterschiede zwischen Gruppen, weniger Verzerrung als globale Mean/Median-Imputation, einfach anzuwenden, wenn eine gute Gruppenvariable vorhanden ist.\\
+$\rightarrow$ Nachteile: Innerhalb der Gruppen wird die Varianz trotzdem unterschätzt, man braucht eine vollständige und sinnvolle Gruppenvariable (z. B. „Geschlecht“ darf nicht selbst viele Missing Values haben), funktioniert nur gut, wenn Gruppen groß genug sind
+
+\subsubsection{Strategie - Modellbasierte Imputation}
+Fehlende Werte werden mit Hilfe eines Vorhersagemodells geschätzt, das aus den vorhandenen Daten gelernt wird - statt einfach Median oder Mittelwert einzusetzen, nutzt man \textbf{Zusammenhänge zwischen Variablen}\\
+$\rightarrow$ Vorteile: Nutzt komplexe Zusammenhänge $\rightarrow$ realistischere Schätzungen, Erhält Varianz besser als Mean/Median-Imputation, kann auch nicht-lineare Muster erfassen\\
+$\rightarrow$ Nachteile: Rechenaufwendig, komplex, Gefahr von Overfitting, Qualität hängt stark von den Trainingsdaten ab
+
+\subsubsection{Vergleichstabelle Imputationsmethoden}
+\begin{tabular}{|l|c|c|c|l|}
+\hline
+\textbf{Methode} & \textbf{Komplexität} & \textbf{Varianz} & \textbf{Beziehungen} & \textbf{Wann nutzen?} \\
+\hline
+Mean/Median & $*$ & \ding{55} Unterschätzt & \ding{55} Ignoriert & MCAR, < 5\% fehlend \\
+\hline
+Gruppenweise & $**$ & \ding{108} Teilweise & \ding{51} Innerhalb Gruppen & MAR mit klaren Gruppen \\
+\hline
+KNN & $***$ & \ding{51} Erhält & \ding{51} Lokal & Lokale Cluster \\
+\hline
+MICE & $****$ & \ding{51} Erhält & \ding{51} Global & MAR, viele Variablen \\
+\hline
+Deep Learning & $*****$ & \ding{51} Erhält & \ding{51} Komplex & Große Datensätze \\
+\hline
+\end{tabular}
+
+\section{EDA - Exploratory Data Analysis}
+Muster erkennen, Fehler finden, Hypothesen generieren
+
+\subsection{Scatterplot}
+\noindent
+\begin{minipage}{0.48\textwidth}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, 
+                labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Stellt die Beziehung zwischen zwei metrischen Variablen in einem Koordinatensystem dar
+    \item Jeder Datenpunkt = ein Beobachtungspaar (x,y)
+    \item Grundlage für lineare Regression
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{img/Scatterplot.png}
+    \vspace{-0.5em}
+\end{minipage}
+
+\section{Lagekennzahlen}
+Lagekennzahlen sollten \textbf{immer zusammen mit Streuungsmaßen} berichtet werden, da dieselbe Lage unterschiedliche Streuungen haben kann.\\ $\rightarrow$ Beispiel: Median = 40 ist nicht informativ, wenn die Spannweite 39–41 oder 10–1000 sein könnte.
+
+\subsection{ECDF inverse zu Quantile}
+\textbf{ECDF} = Empirical Cumulative Distribution Function (empirische Verteilungsfunktion)\\
+Sie zeigt für jeden Wert x, welcher Anteil der Daten kleiner oder gleich x ist.\\
+$F(x) = \frac{\text{Anzahl der Werte } \leq x}{n}$, steigt monoton von 0 bis 1\\
+\textbf{Quantile} sind die \textbf{inverse Sichtweise}:\\
+Bei gegebenem Anteil p (z. B. 0.25, 0.5, 0.75) $\rightarrow$ finde den Wert Q\_p, der mindestens p $\cdot$ 100\% der Daten abdeckt.\\
+\noindent\fbox{%
+  \parbox{0.26\linewidth}{%
+    ECDF: Zahl $\;\to\;$ Prozent\\
+    Quantil: Prozent $\;\to\;$ Zahl
+  }%
+}
+
+\subsection{Mittelwert vs. Median bei Schiefe}
+\textbf{Rechts-Schiefe} (positiv skewed): Verteilung hat einen langen rechten „Tail“ (z. B. Einkommen, Wartezeiten)\\
+$\rightarrow$ \textbf{Mittelwert} (Mean) liegt \textbf{größer als der Median}, weil er von den hohen Extremwerten nach rechts „gezogen“ wird \\
+$\rightarrow$ Median bleibt robust und zeigt das „typische“ Zentrum
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{img/Bildschirmfoto 2025-09-29 um 14.41.36.png}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Typ} & \textbf{Lage der Kennwerte} & \textbf{Beschreibung} \\
+\midrule
+Symmetrisch & $\mathrm{Mean}=\mathrm{Median}=\mathrm{Mode}$ & gleichmäßige Verteilung \\
+Linksschief (negativ) & $\mathrm{Mean}<\mathrm{Median}<\mathrm{Mode}$ & langer linker Tail \\
+Rechtsschief (positiv) & $\mathrm{Mode}<\mathrm{Median}<\mathrm{Mean}$ & langer rechter Tail \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Streuungskennzahlen}
+\textbf{Lagekennzahlen} beschreiben nur das Zentrum\\
+\textbf{Streuungskennzahlen} erfassen, wie stark die Daten um dieses Zentrum schwanken $\rightarrow$ „Breite“ oder „Variabilität“ der Verteilung\\
+
+\subsection{Streuungs-Profil als Routine}
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Missing prüfen
+    \item Lage robust (Median, IQR), dann klassisch (Mittelwert)
+    \item Streuung robust (IQR, MAD), dann klassisch (Varianz, Standardabweichung)
+    \item Ausreißerprüfung ankündigen
+\end{enumerate}
+
+\section{Ausreisser erkennen und behandeln}
+
+\subsection{Einfluss von Ausreißern}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Mean \& SD kippen sehr schnell}: sie steigen stark an, wenn ein Extremwert hinzukommt
+    \item \textbf{Robuste Kennzahlen}: Median, IQR, MAD $\rightarrow$ deshalb immer zuerst berichten, dann erst Ausreißer analysieren
+\end{itemize}
+
+\subsection{Klassischer Z-Score}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Misst, wie viele Standardabweichungen ein Wert vom Mittelwert entfernt ist
+    \item $z_i = \frac{x_i - \bar{x}}{s}$
+    \item Typische Schwelle: $|z| > 3 \rightarrow$ Ausreißer
+    \item Nur sinnvoll bei (nahezu) normalverteilten Daten, sonst irreführend
+\end{itemize}
+\begin{figure}[H]
+        \centering
+        \includegraphics[width=0.75\linewidth]{img/Bildschirmfoto 2025-09-29 um 17.44.48.png}
+\end{figure}
+    
+\subsection{Tukey-Fences (Boxplot-Regel)}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Auf Basis des IQR: $\text{Untergrenze} = Q_1 - 1.5 \cdot IQR,\quad \text{Obergrenze} = Q_3 + 1.5 \cdot IQR$
+    \item Werte außerhalb gelten als Ausreißer-Kandidaten
+    \item Vorteil: \textbf{robust, keine Verteilungsannahme}
+    \item Standard in Boxplots
+\end{itemize}
+\begin{figure}[H]
+        \centering
+    \includegraphics[width=0.75\linewidth]{img/Bildschirmfoto 2025-09-29 um 17.44.54.png}
+\end{figure}
+
+\subsection{Modifizierter Z-Score mit MAD}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Robust gegen Schiefe \& Heavy Tails
+    \item $M_i = \frac{0.6745 (x_i - \tilde{x})}{MAD}$
+    \item Typische Schwelle: $|M| > 3.5$ → Ausreißer
+    \item Sehr geeignet bei nicht-normalen Verteilungen
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{img/Bildschirmfoto 2025-09-29 um 17.45.01.png}
+\end{figure}
+
+\subsection{Strategien im Umgang}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Markieren \& berichten} (für Transparenz, nicht löschen)
+    \item \textbf{Winsorisieren}: Extremwerte auf Grenzwert setzen (deckeln)
+    \item \textbf{Trimmen}: Ränder entfernen (z. B. unterstes und oberstes 5 \%)
+    \item Immer \textbf{Entscheidung dokumentieren} (Regel, Schwelle, Datum, Variable, Datenversion)
+\end{itemize}
+
+\subsection{Heavy Tails vs. echte Ausreißer}
+\noindent
+\begin{minipage}{0.48\textwidth}
+\textbf{Heavy Tails} = Verteilungen mit vielen großen Werten (z.B. Einkommen, Versicherungsfälle). \\$\rightarrow$ nicht automatisch Fehler
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\textbf{Echte Ausreißer} = Datenfehler (Messungen, falsche Einheit etc.)
+\end{minipage}
+\\ \\
+Diagnose nur mit Kombination: \textbf{Kennzahlen + Plots (Histogramm, KDE, ECDF, QQ)}
+
+\subsection{Pipeline für konsistentes Handling}
+Feste Reihenfolge, um Ad-hoc-Fehler zu vermeiden
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Kennzahlen berechnen (Mean, Median, SD, IQR, MAD)
+    \item Plots prüfen (Boxplot, Histogramm, KDE, QQ-Plot)
+    \item Regel anwenden (Z-Score, Tukey, mod. Z)
+    \item Entscheidung dokumentieren (auch Varianten mit/ohne Ausreißer)
+\end{itemize}
+\textbf{Zählen $\rightarrow$ Schauen $\rightarrow$ Handeln $\rightarrow$ Dokumentieren}
+
+\section{Histogramm und KDE}
+
+\subsection{Bin-Wahl}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Zu wenige Bins} $\rightarrow$ glatte, aber irreführende Form (wichtige Details verschwinden)
+    \item \textbf{Zu viele Bins} $\rightarrow$ zackig, verrauscht
+    \item Regeln:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Sturges}: konservativ, eher für normalverteilte Date
+    \item \textbf{$\sqrt{n}$-Regel}: einfache Faustregel
+    \item \textbf{Freedman–Diaconis (FD)}: robust, theoretisch fundiert, meist beste Wahl bei realen Daten
+\end{itemize}
+\end{itemize}
+IMMER dokumentieren!
+
+\subsection{Histogramme interpretieren}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Schiefe}: Rechts- oder linksschief erkennbar
+    \item \textbf{Moden}: Anzahl der „Gipfel“ zeigt mögliche Mischungen/Subgruppen
+    \item \textbf{Lücken}: können auf Clusterung oder fehlende Werte hinweisen
+    \item \textbf{Tails}: zeigen Extremwerte oder Heavy Tails
+\end{itemize}
+
+\subsection{Histogramm vs. KDE}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Histogramm}
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Intuitiv, zählt echte Häufigkeite
+    \item Stabil bei kleinen Stichproben
+    \item Abhängig von Bin-Wahl
+    \end{itemize}
+    \item \textbf{KDE}
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Glatt, zeigt Form der Verteilung deutlicher (Schiefe, Multimodalität)
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item abhängig von Bandbreite
+\end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\section{Box- und Violinplot}
+
+\subsection{Vergleich Box vs. Violin}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Boxplot} - robust \& kompakt (Median + IQR)
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item \textbf{Stärken}: Kompakt, robust, standardisiert, Ausreißer klar sichtbar
+        \item \textbf{Schwächen}: Zeigt keine Details der Verteilungsform
+        \item Boxplot mit Rohdatenpunkten (Strip/Swarm)
+    \end{itemize}
+    \item \textbf{Violonplot} - formreich, zeigt Moden \& Tails
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item \textbf{Stärken}: Zeigt Dichteform \& Multimodalität, Quartile möglich
+        \item \textbf{Schwächen}: Bandbreitenabhängig, schwerer zu lesen
+        \item Best Practice: Violinplot mit Quartilen
+    \end{itemize}
+\end{itemize}
+
+\subsection{Gruppenvergleiche}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Mehrere Gruppen nebeneinander vergleichen:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Boxplot $\rightarrow$ Fokus auf Median \& IQR-Vergleich
+        \item Violinplot $\rightarrow$ Fokus auf Unterschiede in Form, Moden \& Tails
+    \end{itemize}
+    \item Interpretation:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Median A \> Median B $\rightarrow$ klare Lageunterschiede
+        \item Überlappung der IQRs $\rightarrow$ keine klare Trennung
+        \item Formunterschiede (Violin): Hinweis auf Mischungen oder Heterogenität in Gruppen
+    \end{itemize}
+\end{itemize}
+
+\subsection{Zipfel des Violinplots}
+Basiert auf KDE (es wird über die Datenpunkte eine glatte Kurve gelegt, die theoretisch nie ganz aufhören) $\Rightarrow$ Am unteren und oberen Rand der Violine entstehen manchmal kleine \textbf{„Zipfel“} (Bereiche, in denen die Kurve weiterläuft, obwohl dort keine echten Daten vorliegen) $\rightarrow$ \textbf{Rand-Effekt (boundary effect)}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Analytisch}: kein Problem – die Zipfel ändern nichts an der Aussage über Form, Schiefe oder Multimodalität
+    \item \textbf{Visuell}: kann verwirrend wirken, weil es so aussieht, als gäbe es Werte außerhalb des tatsächlichen Datenbereichs
+\end{itemize}
+$\Rightarrow$ In Python/Seaborn (und auch in R): \verb|sns.violinplot(data=df, x="species", y="flipper_length_mm", cut=0)|
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \verb|cut = 0| = Kurve stoppt genau an den echten Daten $\rightarrow$ keine Zipfel mehr
+    \item Die Zipfel verschwinden und die Violine endet genau dort, wo die Daten liegen
+\end{itemize}
+
+\subsection{Stripplot und Swarmplot}
+\textbf{Stripplot} = Stellt jeden Datenpunkt als Punkt dar, optional mit leichtem Jitter (zufälliges horizontales Verschieben), um Überlagerungen zu vermeiden.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Vorteile}: Schnell, robust bei großem n
+    \item \textbf{Nachteile}:Überdeckung möglich
+\end{itemize}
+\textbf{Swarmplot} = Ordnet die Punkte wie Bienenwaben an (kollisionsfrei). Dadurch wird die lokale Dichte sichtbar, keine Punkte überlappen.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Vorteile}: Lokale Dichte sichtbar, klar
+    \item \textbf{Nachteile}: Langsamer, bei großem n überladen
+\end{itemize}
+\textbf{Best Practice}: 
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Für kleine bis mittlere Stichproben: Swarmplot (zeigt Details)
+    \item Für große Stichproben: Stripplot mit Transparenz (zeigt Verteilung, ohne zu überladen)
+\end{itemize}
+
+\section{ECDF und QQ}
+
+\subsection{ECDF (Empirical Cumulative Distribution Function)}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Empirische Verteilungsfunktion einer Stichprobe
+    \item $\hat{F}(x) = \frac{1}{n} \sum 1\{x_i \leq x\}$
+    \item Eigenschaften:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Monoton steigend von 0 bis 1
+        \item Jedes Datenpunkt erzeugt einen Sprung
+        \item Keine Bins nötig $\rightarrow$ \textbf{binfreie Darstellung}
+    \end{itemize}
+    \item Ermöglicht das direkte Ablesen von \textbf{Quantilen}:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Median = Punkt bei $F(x)=0.5$ 
+        \item Q1 bei $F(x)=0.25$, Q3 bei $F(x)=0.75$ $\rightarrow$ direkt aus der Kurve ablesbar
+    \end{itemize}
+    \item Besonders hilfreich bei \textbf{kleinen Datensätzen} oder \textbf{schiefen Verteilungen}, weil Histogramme dort irreführend sein können
+    \item Sehr geeignet für Gruppenvergleiche: mehrere ECDFs nebeneinander legen → Verschiebungen und Unterschiede sofort sichtbar
+\end{itemize}
+\textbf{ECDF: Zahl $\rightarrow$ Prozent, Quantil: Prozent $\rightarrow$ Zahl}
+
+\subsection{QQ-Plot (Quantile-Quantile-Plot)}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Vergleicht die \textbf{Quantile einer Stichprobe} mit den \textbf{Quantilen einer Referenzverteilung}
+    \item Aufgetragen:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item x-Achse = theoretische Quantile
+        \item y-Achse = empirische Quantile
+    \end{itemize}
+    \item Liegen die Punkte auf einer Geraden, passt die Verteilung zur Referenz
+\end{itemize}
+\textbf{Interpretation}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Gerade Linie}: gute Übereinstimmung
+    \item \textbf{Krümmung oben/unten}: Schiefe
+    \item \textbf{Abweichungen in den Rändern}: Heavy Tails (dicke Ausläufer)
+    \item \textbf{S-förmig}: dünnere Tails als Referenz (light tails)
+\end{itemize}
+\textbf{QQ-Plot = Diagnose-Tool für Schiefe \& Tails}
+
+\subsection{Ausreißer-Analyse}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{ECDF} $\rightarrow$ Quantile präzise ablesen, Gruppen robust vergleichen
+    \item \textbf{QQ-Plot} $\rightarrow$ prüfen, ob Daten annähernd normalverteilt sind (wichtig für klassische Tests) oder ob Heavy Tails/Ausreißer vorliegen
+    \item Beides ergänzt Histogramm \& KDE:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Histogramm/KDE: visuell-intuitiv
+        \item ECDF/QQ: mathematisch präziser und robuster
+    \end{itemize}
+\end{itemize}
+
+\section{Korrelation \& Zusammenhang}
+
+\subsubsection{Richtung und Stärke des Zusammenhangs}
+Der \textbf{Korrelationskoeffizient $r$} beschreibt Richtung und Stärke eines linearen Zusammenhangs zwischen zwei metrischen Variablen.\\
+$r \in [-1,\, 1]$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $r > 0$ $\rightarrow$ positiver Zusammenhang:
+hohe X-Werte gehen mit hohen Y-Werten einher
+    \item $r < 0$ $\rightarrow$ negativer Zusammenhang:
+hohe X-Werte gehen mit niedrigen Y-Werten einher
+    \item $r = 0$ $\rightarrow$ kein linearer Zusammenhang
+(aber es kann trotzdem ein nichtlinearer bestehen!)
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{img/Richtungen_des_Zusammenhangs.png}
+\end{figure} 
+Die Stärke wird durch den Betrag $|r|$ angegeben:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $|r| \approx 0$: kein oder sehr schwacher linearer Zusammenhang
+    \item $|r|$ nahe 1: starker Zusammenhang
+\end{itemize}
+
+\subsubsection{Interpretation des Korrelationskoeffizienten $r$}
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.2} 
+\setlength{\tabcolsep}{15pt} 
+\begin{tabular}{llll}
+\hline
+\textbf{$r$-Wert} & \textbf{Richtung} & \textbf{Stärke} & \textbf{Interpretation (sprachlich)} \\
+\hline
+$-1.0$ bis $-0.9$ & negativ & sehr stark & Fast perfekter gegenläufiger Zusammenhang \\
+$-0.9$ bis $-0.7$ & negativ & stark & Klarer Trend: je mehr $X$, desto weniger $Y$ \\
+$-0.7$ bis $-0.4$ & negativ & mittel & Merklicher, aber nicht dominanter Zusammenhang \\
+$-0.4$ bis $-0.2$ & negativ & schwach & Leichter gegenläufiger Trend, viel Rauschen \\
+$-0.2$ bis $0.2$ & -- & keiner & Praktisch kein linearer Zusammenhang \\
+$0.2$ bis $0.4$ & positiv & schwach & Leichter gemeinsamer Trend \\
+$0.4$ bis $0.7$ & positiv & mittel & Stabiler, aber nicht perfekter Zusammenhang \\
+$0.7$ bis $0.9$ & positiv & stark & Klarer Trend: $X$ und $Y$ steigen gemeinsam \\
+$0.9$ bis $1.0$ & positiv & sehr stark & Fast perfekter Gleichlauf \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Korrelation vs. Kausalität}
+\textbf{Korrelation beschreibt ein Muster, keine Ursache.}\\
+$X \uparrow \Rightarrow Y \uparrow \rightarrow$ also „X verursacht Y“ $\rightarrow$ \textbf{nicht zwingend richtig!}\\ Der beobachtete Zusammenhang kann durch Zufall, eine Drittvariable oder umgekehrte Kausalrichtung entstehen.\\
+$\rightarrow$ Eine Konfundierung (Drittvariable) liegt vor, wenn eine dritte Variable Z sowohl X als auch Y beeinflusst.\\
+$\rightarrow$ Nie ohne kontrolliertes \textbf{Experiment} oder \textbf{theoretisches Modell} aus Korrelation auf Kausalität schließen!
+
+\subsection{Kovarianz}
+Die Kovarianz misst, wie stark zwei Variablen gemeinsam von ihren Mittelwerten abweichen.
+$\rightarrow$ Sie zeigt, ob und wie $X$ und $Y$ „miteinander schwingen“: $\text{Cov}(X,Y) = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})$\\
+\noindent
+\begin{minipage}{0.40\textwidth}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{img/Bildschirmfoto 2025-10-07 um 11.52.42.png}
+\end{figure}
+\end{minipage}\hfill
+\begin{minipage}{0.56\textwidth}
+   \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Quadrant I \& III: beide Variablen über/unter Mittelwert $\rightarrow$ positive Produkte $\rightarrow$ positive Kovarianz
+    \item Quadrant II \& IV: eine über, die andere unter $\rightarrow$ negative Produkte $\rightarrow$ negative Kovarianz 
+    \item Wenn sich die Abweichungen zufällig ausgleichen $\rightarrow$ Produkt $\approx 0$ $\rightarrow$ \textbf{kein linearer Zusammenhang}
+\end{itemize}
+\end{minipage}
+
+\subsubsection{Grenzen der Kovarianz}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Einheitenanhängig}: \\
+    $\rightarrow$  z. B. Euro × Jahre oder cm × kg → schwer vergleichbar
+    \item \textbf{Größenabhängig}:\\
+    $\rightarrow$ größere Wertebereiche $\Rightarrow$ automatisch größere Kovarianz\\
+    $\rightarrow$ nicht normiert $\rightarrow$ keine Vergleichbarkeit zwischen Variablen oder Datensätzen
+    \item \textbf{Lösung}: Normierung $\rightarrow$ \textbf{Pearson-Korrelation}
+\end{itemize}
+
+\subsection{Anscombe’s Quartett}
+Das Anscombe’s Quartett (Francis John Anscombe, 1973) besteht aus einer Gruppe von vier Datensätzen, die grafisch sehr unterschiedlich aussehen, aber fast identische deskriptive Kennzahlen haben, z. B.:\\
+\noindent
+\begin{minipage}{0.35\textwidth}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Gleicher Mittelwert von $x$ und $y$
+    \item Gleiche Varianz von $x$ und $y$
+    \item Gleiche Kovarianz
+    \item Gleicher Korrelationskoeffizient r
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}{0.61\textwidth}
+    \begin{figure}[H]
+       \includegraphics[width=1\linewidth]{img/Quartett2.png}
+   \end{figure}
+\end{minipage}
+$\rightarrow$ In Zahlen sehen sie „gleich“ aus – aber \textbf{grafisch völlig unterschiedlich}! $\rightarrow$ Immer plotten!
+
+\section{Kovarianz \& Pearson-Korrelation}
+
+\subsection{Von der Kovarianz zur Korrelation}
+Die Kovarianz ist nicht standardisiert und hängt von den Einheiten ab (z. B. CHF × Jahre).\\
+$\rightarrow$ Sie ist daher nicht vergleichbar zwischen Variablen oder Datensätzen (PROBLEM: Skalenabhängigkeit)\\
+\textbf{Lösung}: Standardisierung durch Division mit den Standardabweichungen von $X$ und $Y$.\\
+$r = \frac{\text{Cov}(X,Y)}{s_X s_Y}$ $\Rightarrow$ Das ergibt die \textbf{Pearson-Korrelation $r$}
+
+\subsection{Pearson-Korrelation}
+\textbf{$r = \frac{\text{Cov}(X,Y)}{s_X s_Y}$}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item immer im Intervall $[-1, +1]$
+    \item +1 = perfekter positiver linearer Zusammenhang
+    \item –1 = perfekter negativer linearer Zusammenhang
+    \item 0 = kein linearer Zusammenhang
+\end{itemize}
+
+\begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{img/PearsonVergleich.png}
+\end{figure}
+
+\subsubsection{Wichtige Eigenschaften von Pearson $r$}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Skalenunabhängig} $\rightarrow$ bleibt gleich, egal ob z. B. in CHF oder \$
+    \item \textbf{Empfindlich gegenüber Ausreißern!} $\rightarrow$ Ein einziger Extremwert kann r massiv verändern
+    \item Nur für lineare Zusammenhänge sinnvoll $\rightarrow$ Nicht-lineare, aber monotone Beziehungen werden unterschätzt.
+    \item Voraussetzungen:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item metrische Variablen (Intervall-/Ratioskala)
+        \item annähernde Normalverteilung
+        \item keine starken Ausreißer
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Anteil erklärter Varianz}
+\noindent
+\begin{minipage}{0.46\textwidth}
+$r^2$ als Bestimmtheitsmaß verwendet, der Korrelationskoeﬃzient $r$ ist nicht der Erklärungsanteil!\\
+$r^2 = \text{Anteil der Varianz von Y, der durch X erklärt wird.}$\\
+Beispiel: $r = 0.8 \Rightarrow r^2 = 0.64 \rightarrow 64 \%$ der Unterschiede in $Y$ hängen mit $X$ zusammen.\\
+\textbf{Aber: Das ist keine Kausalität!}
+\end{minipage}\hfill
+\begin{minipage}{0.50\textwidth}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{img/UnterschiedR.png}
+\end{figure}
+\end{minipage}
+
+\section{Spearman \& Kendall – Rangkorrelationen}
+Pearson-$r$ misst nur lineare Zusammenhänge und reagiert empfindlich auf Ausreißer oder Schiefe. Aber in der Realität sind viele Zusammenhänge nichtlinear, aber trotzdem systematisch $\Rightarrow$ Dafür brauchen wir rangbasierte Maße, die die Ordnung statt die exakten Werte vergleichen.\\
+\\
+\textbf{Spearman} ($\rho$) und \textbf{Kendall} ($\tau$) beruhen auf \textbf{Rängen statt Rohwerten}. $\rightarrow$ Extremwerte werden abgefedert und nur die relative Ordnung wird bewertet
+
+\subsection{Spearman-Korrelation ($\rho$)}
+Ersetzt die Werte durch \textbf{Ränge} und berechnet dann Pearson-$r$ auf diesen Rängen: $\rho = r(\text{rank}(X), \text{rank}(Y))$\\
+Das ergibt ein Maß für den monotonen Zusammenhang (egal ob linear oder gekrümmt).
+\\
+Formel (für kleine Datensätze ohne „Ties“): \textbf{$\rho = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}$} \\mit $d_i$ = Rangdifferenz der i-ten Beobachtung.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $\rho = +1 \rightarrow$ perfekt gleichgerichtete Ränge
+    \item $\rho = -1 \rightarrow$ perfekt umgekehrte Ränge
+    \item $\rho = 0 \rightarrow$ kein monotoner Zusammenhang
+\end{itemize}
+\textbf{Eigenschaften:}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Misst Monotonie, nicht nur Linearität
+    \item Robust gegen Ausreißer (weil Ränge stabil bleiben)
+    \item Keine Normalverteilungs-Annahme nötig
+    \item Gleiche Einheit wie Pearson ($[-1, +1]$)
+\end{itemize}
+
+\subsubsection{Gleiche Werte (Ties)}
+Wenn Werte gleich sind $\rightarrow$ d\textbf{urchschnittlicher Rang}:
+\begin{table}[h!]
+\setlength{\tabcolsep}{12pt}   
+\begin{tabular}{ccc}
+\textbf{Wert} & \textbf{Rang (ohne Ties)} & \textbf{Rang (mit Ties)} \\ \hline
+10 & 1 & 1 \\
+20 & 2 & 2.5 \\
+20 & 3 & 2.5 \\
+40 & 4 & 4 \\
+\end{tabular}
+\end{table}\\
+$\rightarrow$ Beide „20er“ bekommen Rang $(2+3)/2 = 2.5$. \\
+\textbf{Das bewahrt die Ordnung und macht Spearman robust bei doppelten Werten!}
+
+\subsection{Kendall’s Tau ($\tau$)}
+Kendall vergleicht \textbf{Paarordnungen}:\\
+Für jedes Paar ($x_i, y_i$) und ($x_j, y_j$) prüft man:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item konkordant: beide gleich geordnet (steigend/steigend oder fallend/fallend)
+    \item diskordant: entgegengesetzt geordnet
+\end{itemize}
+$\tau = \frac{\text{(konkordante Paare)} - \text{(diskordante Paare)}}{\text{Gesamtzahl der Paare}}$
+
+\textbf{Eigenschaften}:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Wertebereich $[-1, +1]$
+    \item Etwas „gedämpfter“ als Spearman (kleinere Beträge)
+    \item Besonders stabil bei vielen gleichen Rängen (Ties) oder kleinen Stichproben
+    \item Misst dieselbe Idee wie Spearman, aber auf Paar-Ebene statt Rangdifferenzen
+\end{itemize}
+
+\subsection{Vergleich Spearman vs. Kendall}
+\begin{table}[h!]
+\setlength{\tabcolsep}{12pt}     
+\begin{tabular}{l c c}
+\textbf{Merkmal} & \textbf{Spearman ($\rho$)} & \textbf{Kendall ($\tau$)} \\ \hline
+Idee & Pearson auf Rängen & Vergleich von Paaren \\
+Misst & Monotone Ordnung & Konkordanz/Diskordanz \\
+Robustheit & robust & sehr robust \\
+Sensitivität & höher (größere Werte) & gedämpft \\
+Eignung & große $n$, metrisch & kleine $n$, viele Ties \\
+Bereich & [$-1$, $+1$] & [$-1$, $+1$] \\
+\end{tabular}
+\end{table}
+
+\section{Wann welche Korrelation?}
+\noindent
+\begin{minipage}{0.62\textwidth}
+\begin{table}[H]
+\setlength{\tabcolsep}{12pt}
+\begin{tabular}{l c}
+\textbf{Situation} & \textbf{Empfehlung} \\ \hline
+Lineare, metrische Beziehung & Pearson $r$ \\
+Monoton, aber nicht linear & Spearman $\rho$ \\
+Viele gleiche Werte oder kleine Stichprobe & Kendall $\tau$ \\
+Ausreißer vorhanden & Rangmaß ($\rho$ oder $\tau$) \\
+Ordinale Skalen (z.\,B.\ Zufriedenheit 1--5) & Rangmaß \\
+\end{tabular}
+\end{table}
+\end{minipage}\hfill
+\begin{minipage}{0.34\textwidth}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Pearson}: misst \textbf{lineare Stärke}
+    \item \textbf{Spearman}: misst \textbf{monotone Richtung}
+    \item \textbf{Kendall}: misst \textbf{Rangordnung}
+\end{itemize}
+\end{minipage}
+
+\section{Visualisierung von Korrelationen}
+
+\subsection{Regressionslinie im Scatterplot}
+\noindent
+\begin{minipage}{0.48\textwidth}
+Eine Regressionslinie (Trendlinie) verdeutlicht den Zusammenhang – \textbf{ohne Kausalität zu implizieren!}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Steigung}: Richtung des Zusammenhangs
+    \item \textbf{Schatten (Konfidenzintervall)}: Unsicherheit
+    \item \textbf{Nichtlinearität}: erkennbar, wenn Punkte deutlich von der Linie abweichen
+\end{itemize}
+Wenn die Linie gekrümmt oder unpassend erscheint $\rightarrow$ Pearson ist ungeeignet $\rightarrow$  Spearman oder Kendall nutzen
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+   \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{img/Bildschirmfoto 2025-10-11 um 11.53.09.png}
+    \end{figure}
+\end{minipage}
+
+\subsection{Best Practice}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Achsen immer beschriften + Einheiten angeben
+    \item Farben sinnvoll nutzen 
+    \item Einheitliche Skalen bei Gruppenplots
+    \item Transparenz (alpha) gegen Overplotting
+    \item Trends immer kritisch interpretieren – \textbf{Trend $\neq$ Ursache!}
+\end{itemize}
+
+\section{Simpson-Paradox}
+Korrelation ist ein mächtiges Werkzeug, aber in der Praxis häufig falsch interpretiert. Viele scheinbar „offensichtliche“ Trends verschwinden oder kehren sich sogar um, wenn man Drittvariablen oder Gruppen berücksichtigt.$\rightarrow$ Simpson-Paradox\\
+\noindent
+\begin{minipage}{0.48\textwidth}
+\textbf{Definition}: Das Simpson-Paradox beschreibt den Effekt, dass ein Zusammenhang zwischen zwei Variablen in aggregierten Daten anders oder sogar entgegengesetzt ist als in den einzelnen Gruppen.\\
+$\rightarrow$ Konfundierung: Eine Drittvariable (Z) verzerrt den scheinbaren Zusammenhang zwischen X und Y. \\
+Ohne Kontrolle von Z $\Rightarrow$ Scheinkorrelation
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/SimpsonParadox.png}
+\end{figure}
+\end{minipage}
+$~~$\\
+\textbf{Praxisfallen}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Korrelation $\neq$ Kausalität
+    \item Ausreißer \& Nichtlinearität
+    \item Heterogene Gruppen (Aggregationseffekte)
+\end{itemize}
+
+\subsection{Umgang mit Simpson-Eﬀekt}
+Stratifizierte Analysen vermeiden Fehlschlüsse. Immer auf versteckte Variablen prüfen!
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Stratifizierung: Daten nach Konfundierer aufsplitten und separate Analysen pro Gruppe durchführen\\
+    $\rightarrow$ Vergleich Gesamt vs. innerhalb: Wenn sie widersprüchlich sind $\rightarrow$ Gefahr!
+    \item Partielle Korrelation (lineares Herausrechnen des Z-Einflusses)
+    \item Regressionsmodelle mit Kontrollvariablen
+\end{itemize}
+
+\subsection{Partielle Korrelation}
+Um echte Zusammenhänge zu erkennen, musst du Drittvariablen (Z) herausrechnen $\rightarrow$ Die partielle Korrelation \textbf{misst} dann \textbf{den Zusammenhang zwischen zwei Variablen (X und Y)}\\
+$r_{xy \cdot z} = \dfrac{r_{xy} - r_{xz}r_{yz}}{\sqrt{(1 - r_{xz}^2)(1 - r_{yz}^2)}}$\\
+$r_{XY}$: einfache (bivariate) Korrelation zwischen X und Y\\
+$r_{XZ}$, $r_{YZ}$: Korrelationen von X und Y mit Z\\
+\textbf{Interpretation}:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Wenn $r_{XY\cdot Z} \approx r_{XY}$: Kaum Einfluss von Z
+    \item Wenn $r_{XY\cdot Z} \approx 0$, obwohl $r_{XY}$ hoch war: der scheinbare Zusammenhang X–Y war vollständig durch Z erklärt (Konfundierung!)
+    \item $r_{XY\cdot Z} \neq r_{XY}$: zeigt, wie stark Z den ursprünglichen Zusammenhang verzerrt hat
+\end{itemize}
+
+\section{Wahrscheinlichkeit und Verteilungen}
+
+\subsection{Venn-DIagramme}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{
+    img/Venn.png}
+\end{figure}
+
+\subsection{Die drei Axiome nach Kolmogorov}
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Nichtnegativität}: $Pr(A) \geq 0$
+    \item \textbf{Normierung}: $Pr( \Omega ) = 1$
+    \item \textbf{Additivität}: Falls $A \cap B = \varnothing \Rightarrow Pr(A \cup B) = Pr(A)+Pr(B)$
+\end{enumerate}
+
+\subsection{Das Gesetz vom komplementären Ereignis}
+Jedes Ereignis hat ein Gegenteil: zusammen ergeben sie Sicherheit. Komplement: $A^c =$ "A tritt nicht ein"\\
+$Pr(A^c) = 1 - Pr(A)$
+
+\subsection{Das Gesetz der Vereinigung}
+Berücksichtigt Überschneidungen: $Pr(A \cup B) = Pr(A) + Pr(B) - Pr(A \cap B)$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item „Oder“ ist \textbf{inklusiv}
+    \item Wenn A und B unabhängig sind: $Pr(A \cap B) = Pr(A) \times Pr(B)$
+\end{itemize}
+
+\subsection{Unabhängigkeit}
+Das eine Ereignis verändert nicht die Wahrscheinlichkeit des anderen.\\
+$Pr(A \cap B) = Pr(A) \times Pr(B)$\\
+Im Venn-Diagramm: Überlappung vorhanden, aber \textbf{Flächenverhältnis bleibt konstant}.\\
+Unabhängigkeit $\neq$ keine Überlappung!
+
+\subsection{Bedingte Wahrscheinlichkeit}
+Wenn zusätzliche Information vorhanden ist, verändert sich die Wahrscheinlichkeit.\\
+$Pr(A | B) = \frac{Pr(A \cap B)}{Pr(B)}$\\
+$Pr(A | B) =$ Wahrscheinlichkeit von A, unter der Bedingung, dass B eingetreten ist\\
+$Pr(A | B) \neq Pr(B | A)$!
+
+\subsubsection{Das Theorem von Bayes}
+\noindent
+\begin{minipage}{0.52\textwidth}
+Bayes zeigt, \textbf{wie Vorwissen (Prior)} mit \textbf{neuer Evidenz (Daten)} kombiniert wird.\\
+$Pr(B | A) = \frac{Pr(A | B) Pr(B)}{Pr(A)}$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Prior}: Vorwissen über B
+    \item \textbf{Likelihood}: Wie plausibel sind Daten unter B
+    \item \textbf{Evidence}: Gesamtwahrscheinlichkeit der Beobachtung
+    \item \textbf{Posterior}: Aktualisierte Überzeugung nach Daten
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}{0.44\textwidth}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/BayesMalung.png}
+\end{figure}
+\end{minipage}
+\textbf{Bayesian Thinking}: Wissen = dynamisch → Posterior = Prior × Evidenz
+
+\subsection{Risikomasse}
+\textbf{Warum?} Statistik untersucht nicht nur Wahrscheinlichkeiten, sondern auch Unterschiede zwischen Wahrscheinlichkeiten – also, ob ein bestimmter Faktor (E) das Risiko eines Ereignisses (D) verändert.
+
+\subsubsection{Risikodifferenz}
+Zeigt den absoluten Zusatznutzen oder -schaden durch den Faktor E.\\
+$ER = Pr(D|E) - Pr(D|E^c) \rightarrow$ Misst den absoluten Unterschied in Prozentpunkten
+
+\subsubsection{Relatives Risiko (RR) \& Odds Ratio (OR)}
+Diese Maße zeigen den \textbf{Faktor}, um den ein Risiko \textbf{steigt oder sinkt}.\\
+\textbf{Relatives Risiko}: $RR = \frac{Pr(D|E)}{Pr(D|E^c)}$\\
+Gibt an, wie viel-fach höher (oder niedriger) das Risiko mit E ist.\\
+\textbf{Odds Ratio}: $OR = \frac{Pr(D|E)/(1-Pr(D|E))}{Pr(D|E^c)/(1-Pr(D|E^c))}$\\
+Misst das Verhältnis der Quoten (odds), also der Chancen für $D$ relativ zu $D^c$. $\rightarrow$ Wird in der logistischen Regression verwendet (Machine-Learning-Bezug)\\
+Bei \textbf{seltenen Ereignissen} gilt näherungsweise: $OR \approx RR$.
+
+\subsection{Zufallsvariablen \& Verteilungen}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Binomial}: Zählprozesse, n Versuche, p = Erfolgs-Wahrscheinlichkeit\\
+    \item $Pr(X = k) = \binom{n}{k}p^k(1-p)^{n-k}$
+    \item \textbf{Poisson}: Seltene Ereignisse im Intervall\\
+    \item $Pr(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$
+    \item \textbf{Normal}: Summeneffekte / Messfehler $\rightarrow$ Symmetrisch
+    \item \textbf{Exponential}: Zeit bis zum nächsten Ereignis
+    \item \textbf{Uniform}: vollständige Unkenntnis – alle gleich wahrscheinlich
+\end{itemize}
+
+\subsection{Erwartungswert}
+Der Erwartungswert $E(X)$ ist der Schwerpunkt einer Verteilung – also das mathematische Mittel aller möglichen Ausgänge.\\
+Er beschreibt den langfristigen Durchschnitt, nicht das Ergebnis eines einzelnen Experiments.\\
+Diskret: $E(X)=\sum x_i \,Pr(X=x_i)$\\
+Kontinuierlich: $E(X)=\int x\,f(x)\,dx$
+
+\subsection{Varianz und Standardabweichung}
+Die Varianz misst, wie weit Zufallswerte vom Erwartungswert entfernt liegen $\rightarrow$ Streuung oder Unsicherheit der Verteilung\\
+$Var(X)=E[(X-E(X))^2], \quad SD=\sqrt{Var(X)}$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Kleine Varianz $\rightarrow$ Werte liegen eng um den Erwartungswert
+    \item Große Varianz $\rightarrow$ starke Streuung, unregelmäßiger Zufall
+\end{itemize}
+
+\subsection{Gesetz der grossen Zahlen (LLN)}
+\textbf{Viele Zufälle ergeben Regelmäßigkeit.}\\
+Wenn $X_1,\dots,X_n$ unabhängig und identisch verteilt sind, gilt:
+$\bar{X}n=\frac{1}{n}\sum{i=1}^n X_i \xrightarrow[n\to\infty]{} E[X]$\\
+Der \textbf{Stichprobenmittelwert konvergiert} gegen den Erwartungswert.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/GrosseZahlen.png}
+\end{figure}
+
+$\Rightarrow$ \textbf{Zufall wird vorhersagbar}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Einzelbeobachtung = Rauschen; viele Beobachtungen = Signal
+    \item Aggregierte Werte (Mittel, Anteile) $\rightarrow$ verlässlichere Information
+    \item In Data Science: Durchschnitt = Signal über Rauschen
+    \item LLN bedeutet: „Rauschen löscht sich im Schnitt aus.“
+\end{itemize}
+
+\section{Schätzen \& Konfidenzintervalle}
+
+\subsection{Bootstrap – empirische Unsicherheitsschätzung}
+Konfidenzintervalle und Standardfehler basierten auf theoretischen Verteilungen (z. B. Normal- oder t-Verteilung).
+Problem: Diese Annahmen sind oft unrealistisch – insbesondere bei: kleinen Stichproben, unbekannter oder schiefer Verteilung, nichtparametrischen Verfahren.\\
+Bootstrap bietet eine \textbf{verteilungsfreie}, \textbf{empirische Methode}, um die Unsicherheit (z. B. Standardfehler, CI) zu schätzen.
+$\rightarrow$ simuliert wiederholte Stichproben aus der vorhandenen Stichprobe selbst\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/BootstrapVergleich.png}
+\end{figure}
+
+
+
+
+
+
+
+\input{text/glossar}
+\end{document}
+
+$\Rightarrow$
+$~~$\\
+
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item 
+    \item 
+    \item 
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/B2B_B2C.png}
+    \caption{}
+    \label{fig:marktorientierung}
+\end{figure}
+
+\noindent
+\begin{minipage}{0.48\textwidth}
+
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+   
+\end{minipage}
