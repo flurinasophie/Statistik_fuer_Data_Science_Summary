@@ -250,9 +250,9 @@ CDF: Cumulative Distribution Function (Kumulative Verteilungsfunktion): $F(x) = 
 die Gesamtheit, über die du etwas wissen willst.\\
 Sie hat feste, aber unbekannte Kennzahlen = Parameter:
 \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
-  \item Mittelwert: $\mu$
-  \item Varianz: $\sigma^2$
-  \item Anteil / Wahrscheinlichkeit: $\rho$
+  \item Mittelwert (wahrer Durchschnitt): $\mu$ 
+  \item (wahre) Varianz: $\sigma^2$
+  \item (wahrer) Anteil / Wahrscheinlichkeit: $\rho$
 \end{itemize}
 
 \subsection{Stichprobe}
@@ -260,10 +260,11 @@ die Teilmenge, die du tatsächlich misst/befragst.\\
 \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
   \item Größe der Stichprobe: n
   \item Zufallsvariablen: $X_1,..., X_n$ (jede Beobachtung als Zufallsvariable gedacht).
-  \item Schätzer:
+  \item ddof = 1 („Delta Degrees of Freedom“) - korrigiert die Berechnung, damit $s^2$ im Mittel unverzerrt ist
+  \item Schätzer $T$:
   \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
-    \item $\bar{X}$ = Zufallsvariable „Stichprobenmittelwert“
-    \item $\hat{p}$ = Zufallsvariable „Stichprobenanteil“
+    \item $\bar{X}$ = Zufallsvariable „Stichprobenmittelwert“ (hängt von zufälligen Daten ab)
+    \item $\hat{p}$ = Zufallsvariable „Stichprobenanteil“ (konkrete Zahl aus deiner Stichprobe)
     \item Allgemein: $T(X_1,..., X_n)$
   \end{itemize}
   \item Schätzwert (konkrete Zahlen)
@@ -275,11 +276,7 @@ die Teilmenge, die du tatsächlich misst/befragst.\\
 \end{itemize}
 \textbf{Großbuchstaben} $\rightarrow$ Zufallsvariablen (theoretisch, „über viele Stichproben“ gedacht).\\
 \textbf{Kleinbuchstaben} $\rightarrow$ Konkrete Beobachtungen aus einer Stichprobe.\\
-Ideal: zufällig, unabhängig, repräaentativ
-
-
-
-
+Ideal: zufällig, unabhängig, repräsentativ
 
 
 

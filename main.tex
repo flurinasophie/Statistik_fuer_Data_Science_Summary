@@ -911,7 +911,7 @@ $\Rightarrow$ \textbf{Zufall wird vorhersagbar}
     \item LLN bedeutet: „Rauschen löscht sich im Schnitt aus.“
 \end{itemize}
 
-\section{Schätzen \& Konfidenzintervalle}
+\section{Schätzen $\&$ Konfidenzintervalle}
 
 \subsection{Bootstrap – empirische Unsicherheitsschätzung}
 Konfidenzintervalle und Standardfehler basierten auf theoretischen Verteilungen (z. B. Normal- oder t-Verteilung).
@@ -940,20 +940,116 @@ Bei Anteils-Schätzungen (z.\,B. Prozentsätzen) lautet die Formel:\\
 $MoE = z_{\alpha/2} \times \sqrt{\frac{p(1-p)}{n}}$,
 wobei $p$ der geschätzte Anteil ist.
 
-\subsection{Standardabweichung vs. Standardfehler}
+\subsection{Standardabweichung und Standardfehler}
 \textbf{SD}: Wie stark streuen die Daten innerhalb einer Stichprobe?\\
 $\rightarrow$ Datenebene\\
 $\rightarrow$ beschreibt die Variabilität in deiner Stichprobe\\
 \textbf{SE}: Wie stark streut ein Schätzer (z. B. der Mittelwert) zwischen verschiedenen Stichproben?\\
 $\rightarrow$ Schätzer\\
-$\rightarrow$ beschreibt die Unsicherheit deiner Schätzung, also die Streuung von $\bar{X}$ oder $\hat{p}$ über viele gedachte Stichproben.
+$\rightarrow$ beschreibt die Unsicherheit deiner Schätzung, also die Streuung von $\bar{X}$ oder $\hat{p}$ über viele gedachte Stichproben.\\
+Für den Mittelwert: $E(\bar X) = \frac{\sigma}{\sqrt{n}}
+\quad
+\text{(in der Praxis: } \widehat{SE}(\bar X) = \frac{s}{\sqrt{n}} \text{)}$\\
+Für einen Anteil:$SE(\hat p) = \sqrt{\frac{p(1-p)}{n}}
+\quad
+\text{(in der Praxis: } \widehat{SE}(\hat p) = \sqrt{\frac{\hat p (1-\hat p)}{n}} \text{)}$
 
+\subsubsection{Quantile}
+Quantile geben an, wie weit wir vom Zentrum der Verteilung weggehen müssen, um z. B. 95 $\%$ abzudecken.\\
+Konfidenzintervall (KI) = Schätzer $\pm$ (Quantil · SE).\\
+$\alpha$ = Irrtumswahrscheinlichkeit (z.B. $\alpha$ = 0.05 für 95 $\%$-KI)\\
+KI-Idee (für µ) mit z:
+$\bar{x} \pm z_{1-\alpha/2}\cdot SE(\bar{X}) \quad\Rightarrow\quad \bar{x} \pm 1.96\cdot SE(\bar{X})\ \text{bei 95 \%}$
 
+\subsection{Typische (Stichproben) Bias-Arten}
+Anforderungen an die Stichprobe:
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Zufällig (Jedes Element der Population hat die gleiche Chance, ausgewählt zu werden)$\rightarrow$ vermeidet systematische Verzerrungen
+    \item Unabhängig (Der Wert einer Beobachtung beeinflusst nicht den Wert einer anderen) $\rightarrow$ Formeln für Varianz/SE stimmen
+    \item Repräsentativ (Die Stichprobe spiegelt die Vielfalt und Struktur der Population wider) $\rightarrow$ Schätzung ist wirklich übertragbar auf die Population
+\end{enumerate}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item textbf{Selektionsbias}: Nur bestimmte Personen werden befragt
+    \item textbf{Nonresponse-Bias}: Wer nicht antwortet, unterscheidet sich vom Rest
+    \item textbf{Abhängigkeiten}: Daten stammen aus Clustern oder Zeitreihen
+\end{itemize}
 
+\subsection{z-Verteilung}
+= Standardnormalverteilung mit $\mu = 0,\quad \sigma = 1$\\
+Wir standardisieren: $z = \frac{x - \mu}{\sigma}$ $\rightarrow$ z gibt an, wie viele Standardabweichungen ein Wert vom Mittelwert entfernt ist.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item symmetrisch, glockenförmig
+    \item ca. 68 $\%$ der Werte zwischen -1 und +1
+    \item ca. 95 $\%$ der Werte zwischen -1.96 und +1.96
+\end{itemize}
+In Konfidenzintervallen verwenden wir z-Quantile, wenn
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item die Verteilung (nahezu) normal ist und
+    \item die Populationsstreuung $\mu$ bekannt ist oder n so gross, dass $s \approx \sigma \; (\text{CLT})$
+\end{itemize}
 
+\subsection{t-Verteilung}
+n der Praxis kennen wir $\mu$ meistens nicht, sondern schätzen sie aus der Stichprobe durch s. $\rightarrow$ Mehr Unsicherheit, insbesondere bei kleinem n.\\
+t-Statistik: $t = \frac{\bar{x} - \mu}{s / \sqrt{n}}$ $\rightarrow$ Wie z, aber mit s statt $\sigma$ $\rightarrow$ zusätzliche Unsicherheit $\rightarrow$ dickere Tails.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item breitere Flanken (mehr Masse in den Rändern) als z-Verteilung
+    \item hängt von den Freiheitsgraden $df = n-1$ ab:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item kleine df $\rightarrow$ sehr breit, unsicher
+    \item grosse df $\rightarrow$ nähert sich der z-Verteilung an
+    \end{itemize}
+\end{itemize}
+Für Konfidenzintervalle bei kleiner Stichprobe: $\bar{x} \pm t_{df,\,1-\alpha/2} \cdot \frac{s}{\sqrt{n}}$
 
+\subsection{Punktschätzung}
+Idee: Schätzen liefert Zahlen, mit denen man Entscheidungen treffen kann.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/WegVonDaten.png}
+\end{figure}
 
+\subsubsection{Bias $\&$ Varianz}
+\textbf{Bias}: systematischer Fehler\\
+\textbf{Varianz}: Zufallsschwankung\\
+Beim Schätzen: Jede Stichprobe ist anders $\rightarrow$ jeder Schätzwert etwas anders $\Rightarrow$ \textbf{Varianz des Schätzers}\\
+$\rightarrow$ Warum sind Schätzungen zufällig?\\
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Zufällige Stichprobe: wer/was in die Stichprobe kommt
+    \item Modellunsicherheit: das angenommene Modell (z. B. Normalverteilung, Linearität) passt nie perfekt
+\end{enumerate}
+$\Rightarrow$ Schätzer haben keine fixe Zahl, sondern eine Verteilung:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Mittelwert dieser Verteilung $\rightarrow$ Bias (Abstand zur Wahrheit)
+    \item Streuung dieser Verteilung $\rightarrow$ Varianz / SE
+\end{itemize}
+$\Rightarrow$ Mehr Daten $\rightarrow$ Varianz kleiner $\rightarrow$ stabilere Schätzungen
+\\ \\
+\textbf{Modell-Bias} entsteht, wenn wir bewusst ein vereinfachtes Modell verwenden
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item „Modell“ = Annahmen über:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Verteilungsform
+        \item funktionale Beziehung
+        \item konstante Varianz, Unabhängigkeit usw.
+    \end{itemize}    
+    \item Diese Annahmen sind nie perfekt wahr $\rightarrow$ leichter systematischer Fehler (Modell-Bias)
+\end{itemize}
+$\rightarrow$ Vereinfachte Modelle sind stabiler, interpretierbar und oft ausreichend genau für Entscheidungen
 
+\subsubsection{Gütekriterien $\&$ MSE}
+Gute Schätzer balancieren:
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item kleinen Bias (im Mittel nicht weit daneben)
+    \item kleine Varianz (Stichproben-Schätzungen schwanken wenig)
+\end{enumerate}
+Beides zusammen fasst der Mean Squared Error (MSE): $\mathrm{MSE}(T) = \mathbb{E}\big[(T - \theta)^2\big] = \mathrm{Bias}(T)^2 + \mathrm{Var}(T)$\\
+Ziel: \textbf{MSE minimieren} $\rightarrow$ guter Kompromiss zwischen:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item „nicht schief“ (Bias klein)
+    \item „nicht zitterig“ (Varianz klein)
+\end{itemize}
+$\rightarrow$ Ein ganz unverzerrter Schätzer ist nicht unbedingt am besten, wenn seine Varianz sehr gross ist\\
+$\rightarrow$ Leicht verzerrter Schätzer mit viel kleinerer Varianz kann einen kleineren MSE haben → insgesamt „besser“
 
 
 
