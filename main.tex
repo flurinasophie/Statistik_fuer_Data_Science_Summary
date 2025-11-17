@@ -1214,7 +1214,115 @@ $\rightarrow$ Für Vorher–Nachher-Daten oder gepaarte Beobachtungen
 Wiederholtes Testen oder Subgruppen-Analysen, bis $p < 0.05$ erreicht ist\\
 \textbf{Problem}: erhöht massiv die Wahrscheinlichkeit für Fehlalarme ($\alpha$-Inflation)
 
+\subsection{A/B-Test}
+= Hypothesentest, der zwei Varianten (A und B) miteinander vergleicht.
 
+\subsubsection{Ablauf eines A/B-Tests}
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Randomisierung}: Personen werden zufällig A oder B zugeordnet.
+    \item \textbf{Messen}: Wir erfassen eine Metrik (z. B. Conversion).
+    \item \textbf{Testen}: Vergleich der Gruppen (t-Test oder $X^2$ bei Anteilen).
+    \item \textbf{Effektgrösse}: Wie stark ist der Unterschied praktisch?
+\end{enumerate}
+
+\subsection{$X^2$-Test}
+Prüft, ob beobachtete Häufigkeiten in einer Stichprobe signifikant von den erwarteten Häufigkeiten abweicht.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item Wir haben eine \textbf{Kontingenztafel} (z.\,B. A/B $\times$ Ja/Nein).
+  \item Unter H$_0$ gilt: „Kein Unterschied / kein Zusammenhang“ \\
+        $\Rightarrow$ z.\,B. gleiche Ja-Rate in A und B.
+\end{itemize}
+Wir berechnen: $\chi^2 = \sum_{i,j} \frac{(O_{ij} - E_{ij})^2}{E_{ij}}$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item $O$ = observed (beobachtet)
+  \item $E$ = expected (erwartet, wenn H$_0$ stimmt)
+\end{itemize}
+\textbf{Interpretation:}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item Kleine Abweichung O–E $\Rightarrow$ kleiner $\chi^2$-Wert
+        $\Rightarrow$ $H_0$ gut vereinbar mit Daten.
+  \item Grosse Abweichung O–E $\Rightarrow$ grosser $\chi^2$-Wert
+        $\Rightarrow$ H$_0$ unwahrscheinlich $\Rightarrow p$ klein.
+\end{itemize}
+
+\subsubsection{Freiheitsgrade im $X^2$-Test}
+Für eine $r \times c$-Tabelle ($r$ Zeilen, $c$ Spalten):$ df = (r-1)(c-1)$\\
+In der $2 \times 2$-Tabelle (klassischer A/B-Fall): $r = 2, \ c = 2 \Rightarrow df = (2-1)(2-1) = 1.$
+
+\subsection{Permutationstest}
+\textbf{Frage}: Wir haben zwei Gruppen A und B und sehen eine Differenz (z. B. Mittelwert B – Mittelwert A).
+Ist diese Differenz besonders, oder könnte sie leicht durch Zufall entstehen?\\
+Unter $H_0$: „A und B sind gleich“ $\rightarrow$ Die Labels A/B sind austauschbar.\\
+$\rightarrow$ Wenn $H_0$ stimmt, ist es egal, welche Personen als „A“ oder „B“ gelabelt sind.\\
+$\rightarrow$ Jede zufällige Neuverteilung der Labels wäre genauso plausibel wie die Original-Zuordnung.\\
+\textbf{Idee des Permutationstests}:
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Wir mischen die Gruppenlabels immer wieder zufällig durch.
+    \item Für jede Durchmischung berechnen wir die neue Differenz $\Delta$ (z.B. Mittelwert(B) - Mittelwert(A)).
+    \item Wir schauen, wie oft $\lvert \Delta^* \rvert$ mindestens so groß ist wie die beobachtete $\lvert \Delta \rvert$
+\end{enumerate}
+$\rightarrow$ So simulieren wir die Nullverteilung der Differenz, ganz ohne Normalverteilungsannahme.
+
+\subsubsection{Schrittfolge}
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Beobachtete Differenz $\Delta$ berechnen
+    \item Labels mischen: Daten werden zufällig auf Gruppen verteilt.
+    \item Neue Differenz $\Delta^*$ berechnen $\rightarrow$ Schritte 2 und 3 werden sehr häufig wiederholt
+    \item p-Wert bestimmen: Anteil der $\Delta^*$ mit $\lvert \Delta^* \rvert \ge \lvert \Delta \rvert$
+\end{enumerate}
+
+\subsection{Effektgrößen}
+\textbf{Signifikanz $\neq$ Relevanz}\\
+p-Werte sagen nur: «Unterschied auﬀällig?», nicht: «Unterschied wichtig?»\\
+\textbf{Problem}: Bei grossen Stichproben wird fast alles „signifikant“ – auch winzige Effekte.\\
+$\rightarrow$ Eﬀektgrössen messen Stärke eines Eﬀekts, unabhängig von n.
+
+\subsubsection{Cohen’s d}
+\textbf{Cohen's d} misst die Distanz zweier Mittelwerte \textbf{in Einheiten der gemeinsamen Streuung}.\\
+Formel: d$ = \frac{\bar{x}_1 - \bar{x}_2}{s_p}$ mit der gepoolten SD $s_p = \sqrt{\frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}}$
+\textbf{Richtwerte nach Cohen:}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item $d \approx 0.2 \Rightarrow$ kleiner Effekt
+  \item $d \approx 0.5 \Rightarrow$ mittlerer Effekt
+  \item $d \approx 0.8 \Rightarrow$ grosser Effekt
+\end{itemize}
+
+\subsection{Odds $\&$ Odds Ratio}
+Für Ja/Nein-Daten (z. B. Conversion, Risiko) brauchst du andere Effektgrössen.
+
+\subsubsection{Odds}
+= Chancenverhältnis\\
+$\text{Odds} = \frac{P(\text{Ereignis})}{P(\text{kein Ereignis})}$
+
+\subsubsection{Odds Ratio (OR)}
+Odds Ratio vergleicht die Odds zweier Gruppen: $OR = \frac{\text{Odds}_1}{\text{Odds}_2}$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item $OR = 1 \Rightarrow$ gleiche Chancen
+  \item $OR > 1 \Rightarrow$ Gruppe 1 hat höhere Odds als Gruppe 2
+  \item $OR < 1 \Rightarrow$ Gruppe 1 hat geringere Odds
+\end{itemize}
+
+\subsection{Risk Ratio (RR) $\&$ Odds Ratio bei Anteilen}
+Bei A/B-Tests oder Risiken:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item Gruppe 1: Anteil $p_1$ (z.\,B. Risiko in der Impfgruppe)
+  \item Gruppe 2: Anteil $p_2$ (z.\,B. Risiko in der Kontrollgruppe)
+\end{itemize}
+
+\subsubsection{Risk Ratio (RR)}
+= Verhältnis der Risiken / Anteile\\
+$RR = \frac{p_1}{p_2}$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item $RR < 1 \Rightarrow$ Gruppe 1 hat \textbf{geringeres Risiko}
+  \item $RR = 0.33 \Rightarrow$ Risiko reduziert sich auf 33\,\% des Vergleichsrisikos (oder: 67\,\% Reduktion).
+\end{itemize}
+
+\subsubsection{Odds Ratio (OR) bei Anteilen}
+$OR = \frac{p_1/(1-p_1)}{p_2/(1-p_2)}$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item RR ist intuitiver („halbes Risiko“)
+    \item OR ist wichtig, wenn man mit Logistic Regression arbeitet oder bei sehr seltenen Ereignissen (RR $\approx$ OR)
+\end{itemize}
 
 \input{text/glossar}
 \end{document}
