@@ -1051,9 +1051,83 @@ Ziel: \textbf{MSE minimieren} $\rightarrow$ guter Kompromiss zwischen:
 $\rightarrow$ Ein ganz unverzerrter Schätzer ist nicht unbedingt am besten, wenn seine Varianz sehr gross ist\\
 $\rightarrow$ Leicht verzerrter Schätzer mit viel kleinerer Varianz kann einen kleineren MSE haben → insgesamt „besser“
 
+\section{Hypothesentests}
 
+\subsection{Grundidee eines Hypothesentests}
+\begin{enumerate}
+  \item Formuliere $H_0$ (Nullhypothese):
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+      \item „Kein Effekt“, „kein Unterschied“, „Parameter = Referenzwert“.
+      \item Beispiele:
+        \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+          \item Medikament hat keinen Effekt: $\mu_{\text{Med}} = \mu_{\text{Placebo}}$
+          \item Kein Gender-Pay-Gap: $\mu_{\text{Frau}} = \mu_{\text{Mann}}$
+          \item Anteil $= 0{,}5$: $p = 0{,}5$
+        \end{itemize}
+    \end{itemize}
+  \item Formuliere $H_1$ (Alternativhypothese):
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+      \item „Es gibt einen Effekt / Unterschied“.
+      \item Beispiele: $\mu_{\text{Med}} \neq \mu_{\text{Placebo}}, \ \mu_{\text{Frau}} \neq \mu_{\text{Mann}}, \ p \neq 0{,}5$
+      \item Einseitig ($>$, $<$) oder zweiseitig ($\neq$) – je nach Fragestellung.
+    \end{itemize}
+  \item Wähle eine Teststatistik $T$.
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+      \item Eine Zahl, die „Abweichung von $H_0$“ misst.
+      \item Typisch: $z$- oder $t$-Statistik, Differenz der Mittelwerte, Anteilschätzer usw.
+    \end{itemize}
+  \item Bestimme die Verteilung von $T$ unter $H_0$.
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+      \item z.\,B. Standardnormalverteilung oder $t$-Verteilung mit $\mathrm{df} = n-1$.
+    \end{itemize}
+  \item Berechne den beobachteten Wert $t_{\text{obs}}$ aus den Daten.
+  \item Vergleiche $t_{\text{obs}}$ mit der Nullverteilung (p-Wert).
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+      \item p-Wert $=$ Wahrscheinlichkeit (unter $H_0$), einen Wert mindestens so extrem wie $t_{\text{obs}}$ zu erhalten.
+      \item kleiner p-Wert $\Rightarrow$ starke Evidenz gegen $H_0$.
+    \end{itemize}
+  \item Entscheidungsregel:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+      \item Wenn $p \le \alpha \Rightarrow H_0$ verwerfen („statistisch signifikant“).
+      \item Wenn $p > \alpha \Rightarrow H_0$ nicht verwerfen (Daten reichen nicht, um $H_0$ zu kippen).
+    \end{itemize}
+\end{enumerate}
 
+\subsection{Fehler 1. und 2. Art $\&$ Teststärke (Power)}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} lcc}
+\hline
+Realität $\backslash$ Entscheidung & $H_0$ \emph{nicht} verwerfen & $H_0$ verwerfen \\
+\hline
+$H_0$ ist wahr   & korrekt                  & Fehler 1.\ Art ($\alpha$)           \\
+$H_0$ ist falsch & Fehler 2.\ Art ($\beta$) & korrekt (Power $= 1-\beta$) \\
+\hline
+\end{tabular*}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Fehler 1. Art ($\alpha$)
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item $H_0$ ist wahr, aber wir verwerfen sie.
+        \item False Positive“, Fehlalarm.
+        \item Signifikanzniveau $\alpha$ ist die erlaubte Wahrscheinlichkeit für diesen Fehler (z. B. 5 $\%$).
+        \item Wird vom Forschenden festgelegt
+    \end{itemize}
+    \item Fehler 2. Art ($\beta$)
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item $H_0$ ist falsch, aber wir verwerfen sie nicht.
+        \item „False Negative“, übersehener Effekt
+    \end{itemize}
+    \item Teststärke / Power $= 1-\beta$
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Wahrscheinlichkeit, $H_0$ korrekt zu verwerfen, wenn sie tatsächlich falsch ist (echter Effekt)
+        \item Ziel: $\alpha$ klein und Power gross
+    \end{itemize}
+\end{itemize}
 
+\subsubsection{Einfluss auf Power}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item grösseres n $\rightarrow$ kleinere SE $\rightarrow$ höhere Power
+    \item grösserer wahrer Effekt $\rightarrow$ leichter zu entdecken $\rightarrow$ höhere Power
+    \item kleineres $\alpha$ $\rightarrow$ strengere Schwelle $\rightarrow$ tendenziell niedrigere Power (Trade-off)
+\end{itemize}
 
 \input{text/glossar}
 \end{document}
