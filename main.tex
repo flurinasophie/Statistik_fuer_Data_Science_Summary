@@ -1125,9 +1125,96 @@ $H_0$ ist falsch & Fehler 2.\ Art ($\beta$) & korrekt (Power $= 1-\beta$) \\
 \subsubsection{Einfluss auf Power}
 \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
     \item grösseres n $\rightarrow$ kleinere SE $\rightarrow$ höhere Power
-    \item grösserer wahrer Effekt $\rightarrow$ leichter zu entdecken $\rightarrow$ höhere Power
+    \item grösserer wahrer Effekt $\Delta$ $\rightarrow$ leichter zu entdecken $\rightarrow$ höhere Power
     \item kleineres $\alpha$ $\rightarrow$ strengere Schwelle $\rightarrow$ tendenziell niedrigere Power (Trade-off)
 \end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/EinflussAufPower.png}
+\end{figure}
+\begin{center}
+Größere Stichprobe $\rightarrow$ schmalere Kurve $\rightarrow$ geringere Überlappung $\rightarrow$ höhere Power
+\end{center}
+
+\subsection{p-Wert}
+= Wahrscheinlichkeit, unter $H_0$ ein Ergebnis so extrem oder extremer zu beobachten wie das tatsächlich beobachtete.\\
+$\rightarrow$ misst die Kompatibilität der Daten mit $H_0$. $\rightarrow$ Je kleiner $p$, desto schlechter passen die Daten zu einer Welt, in der $H_0$ stimmt.\\
+$p = P\bigl(T \ge t_{\text{beobachtet}} \mid H_0\bigr)$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item $T$ = Teststatistik (z-, t-Wert, \dots)
+  \item $t_{\text{beobachtet}}$ = Wert, den du aus deinen Daten ausrechnest
+  \item Die Wahrscheinlichkeit wird \textbf{unter der Annahme $H_0$} berechnet.
+\end{itemize}
+Interpretation:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{kleiner p-Wert} $\Rightarrow$ die beobachteten Daten wären unter $H_0$ \textbf{ungewöhnlich} \\
+        $\Rightarrow H_0$ ist schlecht mit den Daten kompatibel $\Rightarrow$ spricht \textbf{gegen $H_0$}
+  \item \textbf{grosser p-Wert} $\Rightarrow$ die Daten sind unter $H_0$ \textbf{typisch} \\
+        $\Rightarrow$ nichts in den Daten spricht stark gegen $H_0$
+\end{itemize}
+
+\subsubsection{Entscheidungsregel (Zusammenhang zu $\alpha$)}
+\begin{itemize}
+  \item Du wählst ein \textbf{Signifikanzniveau} $\alpha$ 
+  \item Entscheidungsregel:
+  \begin{itemize}
+    \item Wenn \textbf{$p \le \alpha$} $\Rightarrow$ Ergebnis „statistisch signifikant“ $\Rightarrow$ \textbf{$H_0$ verwerfen}
+    \item Wenn \textbf{$p > \alpha$} $\Rightarrow$ \textbf{$H_0$ nicht verwerfen} (Daten reichen nicht, um $H_0$ zu kippen)
+  \end{itemize}
+\end{itemize}
+\textbf{Wichtig:} „$H_0$ nicht verwerfen“ heisst \emph{nicht}, dass $H_0$ bewiesen ist – nur, dass die Daten mit $H_0$ \textbf{nicht im Widerspruch} stehen.
+
+\subsection{t-Tests}
+t-Tests sind immer Tests über Mittelwerte und benutzen die t-Verteilung, weil $\sigma$ unbekannt ist und durch s geschätzt wird.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{1-Sample}: Mittelwert einer Stichprobe vs. Referenzwert
+    \item \textbf{2-Sample}: Mittelwerte zweier unabhängiger Gruppen vergleichen
+    \item \textbf{Paired}: Vorher–Nachher / gepaarte Messungen derselben Personen
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/tTests.png}
+\end{figure}
+
+\subsubsection{Zwei-Stichproben-t-Test}
+Prüft, ob sich zwei unabhängige Gruppen im Mittelwert unterscheiden.
+\[
+t = \frac{\bar{x}_1 - \bar{x}_2}{s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}
+\]
+\[
+s_p^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}
+\]
+
+
+\subsubsection{Gepaarter t-Test}
+$\rightarrow$ Für Vorher–Nachher-Daten oder gepaarte Beobachtungen
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item Für jede Person $i$ eine Differenz bilden: $d_i = x_{i,\text{nachher}} - x_{i,\text{vorher}}$
+
+  \item Mittelwert und SD der Differenzen:
+  \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $\bar{d}$ = Durchschnitt der $d_i$
+    \item $s_d$ = SD der $d_i$
+  \end{itemize}
+
+  \item Hypothesen:
+  \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item H$_0$: $\mu_d = 0$ (kein mittlerer Unterschied)
+    \item H$_1$: $\mu_d \neq 0$ (oder $> 0$, $< 0$ einseitig)
+  \end{itemize}
+
+  \item Teststatistik: $t = \frac{\bar{d}}{s_d / \sqrt{n}}$
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item $n$ = Anzahl Paare / Personen
+        \item $\mathrm{df} = n - 1$
+    \end{itemize}
+\end{enumerate}
+
+\subsection{p-Hacking}
+Wiederholtes Testen oder Subgruppen-Analysen, bis $p < 0.05$ erreicht ist\\
+\textbf{Problem}: erhöht massiv die Wahrscheinlichkeit für Fehlalarme ($\alpha$-Inflation)
+
+
 
 \input{text/glossar}
 \end{document}
