@@ -11,6 +11,7 @@
 \usepackage{pifont}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage[table,xcdraw]{xcolor}
 \usepackage{longtable}
 \usepackage{array}
 \usepackage[
@@ -1325,6 +1326,26 @@ $OR = \frac{p_1/(1-p_1)}{p_2/(1-p_2)}$
 \end{itemize}
 
 \section{Gruppenvergleiche}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|p{2cm}|p{2.5cm}|p{2.2cm}|p{2cm}|p{2.2cm}|p{2cm}|p{2.3cm}|}
+\hline
+\textbf{Vergleichs- \newline methode} & \textbf{Wann benutzt?} & \textbf{Voraus- \newline setzungen} & \textbf{Vorteile} & \textbf{Nachteile} & \textbf{Unterschiede zu anderen Methoden} & \textbf{Weitere \newline Kriterien} \\
+\hline
+\textbf{ANOVA} & Vergleich von mehr als zwei Gruppen, um festzustellen, ob mindestens eine Gruppe sich signifikant unterscheidet & Normalverteilung in den Gruppen; \newline Homogene Varianzen; \newline Unabhängige Stichproben & Effizient bei mehreren Gruppen; \newline Reduziert Fehler durch multiple Tests & Nur Signifikanz, keine spezifischen Unterschiede; \newline Voraussetzungen oft schwer zu erfüllen & Vergleich zu t-Tests (nur für zwei Gruppen); \newline Erfordert Post-hoc-Tests bei Signifikanz & Bei Verletzung der Voraussetzungen: Alternativen wie nichtparametrische Tests (z.B. Kruskal-Wallis) \\
+\hline
+\textbf{Kruskal-Wallis-Test} & Nichtparametrischer Vergleich mehrerer Gruppen, wenn Voraussetzungen für ANOVA nicht erfüllt sind & Keine Normalverteilung; \newline Unabhängige Stichproben & Robust gegen Verletzungen der Normalverteilung; \newline Einfach anzuwenden & Weniger sensitiv; \newline Keine Angabe zu spezifischen Unterschieden & Vergleich zu ANOVA: keine Annahme der Normalverteilung & Für ordinal skalierte Daten geeignet \\
+\hline
+\textbf{Post-hoc-Tests} & Nach einem signifikanten ANOVA oder Kruskal-Wallis, um spezifische Gruppenunterschiede zu identifizieren & Signifikanter Gesamteffekt (z.B. ANOVA); \newline Mehrere Gruppen & Identifikation spezifischer Unterschiede; \newline Kontrolle der Fehlerwahrscheinlichkeit & Erhöhte Komplexität; \newline Kann konservativ sein (z.B. Bonferroni) & Ergänzung zu ANOVA/ Kruskal-Wallis, keine eigenständige Methode & Wichtig bei mehreren Vergleichen, um Fehler zu kontrollieren \\
+\hline
+\textbf{Multiple Tests} & Vergleich aller Gruppenpaare, wenn nur wenige Gruppen vorhanden sind & Unabhängige Stichproben; \newline Normalverteilung (bei parametrischen Tests) & Einfach bei wenigen Vergleichen; \newline Direkte Unterschiede sichtbar & Erhöhtes Risiko für Fehler 1. Art (falsch positive Ergebnisse) & Vergleich zu globalen Tests (ANOVA, Kruskal-Wallis) & Fehlerkontrolle notwendig (z.B. Bonferroni, Holm) \\
+\hline
+\textbf{FDR} & Korrektur bei vielen Tests, um die Rate der falsch positiven Ergebnisse zu kontrollieren & Mehrere Tests; \newline Unabhängige oder abhängige Tests & Weniger konservativ als Bonferroni; \newline Beibehaltung der Power & Komplexere Berechnung; \newline Kontrolle der FDR, nicht des Familienfehlerniveaus & Vergleich zu Bonferroni: weniger streng, mehr Power & Besonders bei Hochdurchsatzdaten (z.B. Genexpression) sinnvoll \\
+\hline
+\end{tabular}
+\end{table}
+
 
 \subsection{ANOVA}
 \textbf{Problem}: Mehr als zwei Gruppen (z.B. A, B, C) mit unterschiedlichen Mittelwerten.
@@ -1461,6 +1482,52 @@ $\rightarrow$ Ohne Korrektur erhält man viele scheinbare "Treffer" $\Rightarrow
 Wenn du $m$ Tests machst, gibst du jedem Test nur noch $\alpha_{\text{neu}} = \frac{\alpha}{m}$ als Signifikanzschwelle.\\
 \textbf{Vorteil}: sehr starker Schutz vor Fehlalarmen $\rightarrow$ fast keine False Positives mehr.\\
 \textbf{Nachteil}: extrem wenig Power $\rightarrow$ viele echte Effekte werden nicht mehr signifikant $\rightarrow$ „verschwinden“
+
+\subsection{FDR (False Discovery Rate)}
+Statt „kein einziger Fehlalarm“ zu garantieren (wie Bonferroni) kontrolliert FDR den \textbf{Anteil falscher Entdeckungen unter allen signifikanten Ergebnissen}.
+
+\subsubsection{Benjamini–Hochberg (BH)}
+BH baut eine adaptive, steigende Schwelle $T_i$ auf den sortierten p-Werten.
+\textbf{Gegeben:}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $m$ Tests mit $p$-Werten $p_1, \ldots, p_m$
+    \item gewünschte FDR-Rate $\alpha$ (z.\,B.\ 0.05)
+\end{itemize}
+\textbf{Algorithmus:}
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Sortiere die $p$-Werte: $p_{(1)} \le p_{(2)} \le \cdots \le p_{(m)}$
+    \item Für jedes $i = 1, \ldots, m$ berechne die BH-Schwelle $T_i = \frac{i}{m} \alpha$
+    \\$\rightarrow$ $T_i$ steigt mit $i$ (später „dürfen“ $p$-Werte grösser sein).
+    \item Finde das grösste $i$, für das $p_{(i)} \le T_i$
+    \item Dann sind alle Hypothesen mit $p_{(1)}, \ldots, p_{(i)}$ signifikant nach FDR.
+\end{enumerate}
+Visuell (FDR-Linie):
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item sortierte $p$-Werte als Punkte
+    \item BH-Linie: $T_i = i/m \cdot \alpha$ (ansteigende Linie)
+    \item Punkte \textbf{unter} der Linie $\rightarrow$ signifikant
+    \item Punkte \textbf{über} der Linie $\rightarrow$ nicht signifikant
+\end{itemize}
+
+\subsubsection{FDR-korrigierte p-Werte}
+In der Praxis (z.\,B.\ \texttt{statsmodels.multitest.multipletests}):
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item du gibst eine Liste von $p$-Werten rein,
+    \item das BH-Verfahren berechnet \textbf{FDR-korrigierte p-Werte} $\tilde{p}_j$,
+    \item dann gilt:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item $\tilde{p}_j \le \alpha \Leftrightarrow$ Test $j$ ist signifikant nach FDR.
+    \end{itemize}
+\end{itemize}
+Diese korrigierten $p$-Werte sind so skaliert, dass der erwartete Anteil falscher Discoveries $\approx \alpha$ bleibt.
+\textbf{Vorteil:}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item weniger streng als Bonferroni $\Rightarrow$ mehr echte Effekte
+    \item trotzdem sinnvolle Kontrolle der False Positives.
+\end{itemize}
+\textbf{Ein Test = eine Hypothesenprüfung = ein p-Wert}
+
+
 
 
 
