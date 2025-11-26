@@ -1324,6 +1324,146 @@ $OR = \frac{p_1/(1-p_1)}{p_2/(1-p_2)}$
     \item OR ist wichtig, wenn man mit Logistic Regression arbeitet oder bei sehr seltenen Ereignissen (RR $\approx$ OR)
 \end{itemize}
 
+\section{Gruppenvergleiche}
+
+\subsection{ANOVA}
+\textbf{Problem}: Mehr als zwei Gruppen (z.B. A, B, C) mit unterschiedlichen Mittelwerten.
+\\Ein t-Test kann immer nur zwei Gruppen vergleichen. Viele t-Tests $\Rightarrow$ Fehlerinflation.\\
+$\Rightarrow$ ANOVA prüft in einem Test, ob es globale Mittelwertunterschiede für 3+ Gruppen gibt.
+ 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/ANOVA.png}
+\end{figure}
+
+ANOVA vergleicht:
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Between-Varianz}
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Unterschiede der Gruppenmittelwerte
+        \item Unterschiede der Gruppenmittelwerte
+    \end{itemize}
+    \item \textbf{Within-Varianz}
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Streuung \textbf{innerhalb der Gruppen}
+        \item „Wie stark streuen die Punkte/Individuen um den Balken herum?“
+    \end{itemize}
+\end{enumerate}
+\textbf{Teststatistik (Mean Square-Verhältnis)}: $F = \frac{MS_{\text{between}}}{MS_{\text{within}}}$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $MS_{\text{between}}$: mittlere Quadratsumme \textbf{zwischen} Gruppen
+    \item $MS_{\text{within}}$: mittlere Quadratsumme \textbf{innerhalb} Gruppen
+\end{itemize}
+Hoher F $\rightarrow$ Gruppen unterscheiden sich stärker als zufällig erwartet
+
+\subsubsection{Ablauf}
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item Gruppenmittelwerte berechnen.
+  \item Between-Varianz ($SS_{\text{between}}$) bestimmen
+  \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Sum of Squares zwischen den Gruppen.
+  \end{itemize}
+  \item Within-Varianz ($SS_{\text{within}}$) bestimmen
+  \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Sum of Squares innerhalb der Gruppen.
+  \end{itemize}
+  \item Mittelquadrate berechnen:\\
+  $MS_{\text{between}} = \frac{SS_{\text{between}}}{df_{\text{between}}}$\\
+  $MS_{\text{within}} = \frac{SS_{\text{within}}}{df_{\text{within}}}$
+  \item F-Wert berechnen:\\
+  $F = \frac{MS_{\text{between}}}{MS_{\text{within}}}$
+  \item p-Wert aus der F-Verteilung mit passenden $df$ bestimmen.
+\end{enumerate}
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.9\linewidth]{img/ANOVA_Ablauf.png}
+\end{figure}
+ANOVA testet eine globale Nullhypothese über alle Gruppenmittelwerte.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item H$_0$: $\mu_1 = \mu_2 = \cdots = \mu_k$ (alle k Gruppen haben denselben Mittelwert)
+  \item H$_1$: Mindestens eine Gruppe weicht ab
+  \item ANOVA sagt \textbf{nicht}, welche Gruppe anders ist $\Rightarrow$ Dafür braucht es Post-hoc Tests
+\end{itemize}
+
+\subsection{Post-hoc Test}
+\textbf{„Zwischen welchen Gruppen liegen Unterschiede und wie stark?“}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/PostHoc}
+\end{figure}
+
+\subsubsection{Post-hoc: Tukey HSD}
+\textbf{HSD = Honest Significant Difference}\\
+Tukey HSD ist der Standard-Post-hoc nach ANOVA:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item vergleicht alle Gruppenpaare gleichzeitig
+    \item nutzt die gemeinsame Varianzschätzung aus der ANOVA (MS\_within / gepoolte Varianz)
+    \item liefert für jedes Paar:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Mittelwertdifferenz
+        \item Konfidenzintervall
+        \item Konfidenzintervall
+    \end{itemize}
+    \item robust, auch wenn es viele Paarvergleiche gibt
+    \item kontrolliert Fehler 1. Art über alle Paarvergleiche zusammen
+\end{itemize}
+\textbf{ANOVA zeigt \large{ob}, Post-hoc zeigt \large{wo} Unterschiede liegen.}
+
+\subsection{Kruskal-Wallis}
+nichtparametrischer Test für 3+ unabhängige Gruppen, der nur mit Rängen arbeitet
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item funktioniert für metrische oder ordinale Daten
+    \item braucht keine Normalverteilung
+    \item testet v. a. Lage-/Medianunterschiede
+    \item ist die Verallgemeinerung des Wilcoxon-Rangsummen-Tests von 2 auf k Gruppen.
+\end{itemize}
+Warum machen Ränge den Test robust?
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Extreme Ausreisser bekommen nur „grosse Ränge“, aber keinen quadratischen Einfluss wie in Varianz-Berechnungen
+    \item Schiefe + heavy tails stören viel weniger, weil nur die Reihenfolge zählt, nicht die genauen Abstände
+    \end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/Kruskal_Wallis.png}
+\end{figure}
+\textbf{Notation:}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $k = \text{Anzahl Gruppen}$
+    \item $n_i = \text{Gruppengrösse i}$
+    \item $N = \text{Gesamtzahl Beobachtungen} = \sum_i n_i$
+    \item $R_i = \text{Summe der Ränge in Gruppe i}$
+\end{itemize}
+\textbf{Die Kruskal-Wallis-Statistik:}$ H = \frac{12}{N(N+1)} \sum_{i=1}^k \frac{R_i^2}{n_i} - 3(N+1)$\\
+Unter $H_0$ (,,alle Gruppen stammen aus Populationen mit \textbf{gleicher Verteilung}’’):
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item folgt $H$ \textbf{approximativ einer $\chi^2$-Verteilung} mit $df = k - 1$ (bei ausreichend grossen $n_i$).
+    \item p-Wert $= P(\chi^2_{k-1} \ge H_{\text{beobachtet}})$.
+\end{itemize}
+Wenn $p \le \alpha$ $\rightarrow$ Nullhypothese verwerfen $\rightarrow$ \textbf{mindestens eine Gruppe unterscheidet sich in der Lage/Verteilung}.
+
+\subsection{Multiple Tests}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/Multiple_Test.png}
+\end{figure}
+Viele parallele Tests erhöhen die Wahrscheinlichkeit für Zufallstreﬀer massiv.\\
+Wenn du m Tests machst, steigt die Chance auf mindestens einen Fehlalarm stark an:
+\\Gesamtfehler$ = 1 - (1 - \alpha)^m$\\
+$\rightarrow$ Ohne Korrektur erhält man viele scheinbare "Treffer" $\Rightarrow$ Verfahren zur Fehlerkontrolle, z. B.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item Bonferroni-Korrektur (sehr streng)
+    \item FDR (False Discovery Rate)
+\end{itemize}
+
+\subsubsection{Bonferroni-Korrektur}
+(zu streng, aber einfach)\\
+\textbf{Ziel}: Gesamtfehler (family-wise error rate) $\le \alpha$ halten.\\
+Wenn du $m$ Tests machst, gibst du jedem Test nur noch $\alpha_{\text{neu}} = \frac{\alpha}{m}$ als Signifikanzschwelle.\\
+\textbf{Vorteil}: sehr starker Schutz vor Fehlalarmen $\rightarrow$ fast keine False Positives mehr.\\
+\textbf{Nachteil}: extrem wenig Power $\rightarrow$ viele echte Effekte werden nicht mehr signifikant $\rightarrow$ „verschwinden“
+
+
+
 \input{text/glossar}
 \end{document}
 
