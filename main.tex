@@ -1527,9 +1527,194 @@ Diese korrigierten $p$-Werte sind so skaliert, dass der erwartete Anteil falsche
 \end{itemize}
 \textbf{Ein Test = eine Hypothesenprüfung = ein p-Wert}
 
+\section{Regression}
+Regression beschreibt, wie X sich verändert, wenn Y sich verändert.
 
+\subsection{Einfache Lineare Regression}
+Regression ist ein Verfahren, um den gerichteten Zusammenhang zwischen einer unabhängigen Variable (X) und einer abhängigen Variable (Y) zu modellieren. $\rightarrow$ Wir nähern die Realität (die oft nicht perfekt linear ist) durch eine lineare Funktion an, um ein einfaches, interpretierbares Modell zu erhalten.
 
+\subsubsection{Regression vs. Korrelation}
+Während die Korrelation nur die Stärke eines Zusammenhangs misst, modelliert die Regression die Art des Zusammenhangs.\\
+\begin{tabular}{ll|l}
+\textbf{Merkmal} & \textbf{Korrelation ($r$)} & \textbf{Regression ($R^2, \beta$)} \\[1ex]
+\textbf{Symmetrie} & 
+Symmetrisch: $\rho(X,Y) = \rho(Y,X)$ &
+\textbf{Gerichtet:} $X \rightarrow Y$ (Ursache $\rightarrow$ Wirkung Annahme) \\[2ex]
+\textbf{Fragestellung} &
+„Wie stark hängen X und Y zusammen?“ &
+„Wie verändert sich Y, wenn ich X ändere?“ \\[2ex]
+\textbf{Output} &
+Eine Zahl zwischen -1 und 1 &
+Eine Funktionsgleichung (Gerade) \\[2ex]
+\textbf{Einheit} &
+Einheitslos &
+Hängt von den Einheiten von X und Y ab \\
+\end{tabular}
 
+\subsubsection{Das Lineare Modell}
+Die einfache lineare Regression beschreibt Y als lineare Funktion von X plus Fehler.\\
+\textbf{Die Modellgleichung:} $Y = \beta_0 + \beta_1 X + \epsilon$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $\beta_0$ \textbf{(Achsenabschnitt / Intercept)}:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Der erwartete Wert von $Y$, wenn $X = 0$ ist.
+        \item \textit{Interpretation:} „Der Basiswert ohne Einfluss von X.“
+    \end{itemize}
+    \item $\beta_1$ \textbf{(Steigung / Slope)}:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Die Veränderung von $Y$, wenn $X$ um \textbf{eine Einheit} steigt.
+        \item \textit{Interpretation:} „Wenn X um 1 steigt, steigt/sinkt Y durchschnittlich um $\beta_1$.“
+    \end{itemize}
+    \item $\epsilon$ \textbf{(Fehlerterm / Residuum)}:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Alles, was das Modell nicht erklären kann (Rauschen, Zufall).
+    \end{itemize}
+\end{itemize}
+\textbf{Achtung:} Ein lineares Modell ist oft nur eine Approximation der Realität. 
+Wir nutzen es, weil es einfach und interpretierbar ist.
+
+\subsubsection{Schätzung: OLS (Ordinary Least Squares)}
+Wie finden wir die "beste" Gerade durch die Punktewolke? Methode: Kleinste-Quadrate-Schätzung (OLS).
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Ziel:} Minimiere die Summe der quadrierten Abweichungen (Fehler).
+    \item \textbf{Formel:} Minimiere $RSS = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$
+    \item \textbf{Warum werden die Fehler quadriert?}
+    \begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Damit sich positive und negative Fehler nicht gegenseitig aufheben.
+        \item Große Abweichungen werden stärker bestraft („Ausreißer ziehen die Gerade an“).
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection{Residuen}
+Nachdem wir das Modell geschätzt haben, müssen wir prüfen, ob es valide ist. Das tun wir über die Residuen.\\
+Das Residuum $e_i$ ist die Differenz zwischen der Realität und der Modellvorhersage.\\
+$\textit{Residuum} = \text{beobachtetes } Y - \text{vorhergesagtes } \hat{Y}$\\
+Wir wollen, dass die Residuen zufällig aussehen (kein Muster). Das bedeutet, das Modell hat alle systematischen Informationen aus den Daten herausgefiltert, und übrig bleibt nur noch zufälliges Rauschen.\\
+Diagnose: Was wir in den Residuen \textbf{NICHT} sehen wollen\\
+Wenn die Residuen Muster zeigen, haben wir ein Problem:\\
+\begin{tabular}{l l p{8cm}}
+\textbf{Muster im Plot} & \textbf{Diagnose (Problem)} & \textbf{Bedeutung} \\[6pt]
+Kurve / Bogen & Nichtlinearität & 
+Der Zusammenhang ist nicht linear (z.B. quadratisch). Unser einfaches lineares Modell passt nicht. \\[10pt]
+Trichterform & Heteroskedastizität & 
+Die Varianz der Fehler ist nicht konstant (z.B. werden Fehler bei großen Werten größer). \\[10pt]
+Einzelne Punkte weit weg & Ausreißer & 
+Einzelne Datenpunkte verzerren das Modell massiv. \\
+\end{tabular}
+
+\subsection{Zerlegung der Variation (TSS, ESS, RSS)}
+Um zu messen, wie "gut" das Modell ist, zerlegen wir die gesamte Streuung der Daten in zwei Teile: Was wir erklären können und was Fehler bleibt.\\
+Die „Magische Formel“ der Varianzzerlegung lautet: $TSS = ESS + RSS$\\
+Hier die Definitionen für deine Formelsammlung:\\
+\begin{tabular}{l l l p{8cm}}
+\textbf{Kürzel} & \textbf{Name} & \textbf{Formel} & \textbf{Erklärung} \\[6pt]
+TSS & Total Sum of Squares &
+$\sum (y_i - \bar{y})^2$ &
+\textbf{Gesamtvariation:} Wie stark schwanken die Daten insgesamt um ihren Mittelwert? (Ohne Modell). \\[12pt]
+RSS & Residual Sum of Squares &
+$\sum (y_i - \hat{y}_i)^2$ &
+\textbf{Unerklärte Variation:} Der Fehler, den das Modell noch macht. (Je kleiner, desto besser). \\[12pt]
+ESS & Explained Sum of Squares &
+$\sum (\hat{y}_i - \bar{y})^2$ &
+\textbf{Erklärte Variation:} Wie viel der Streuung kann das Modell „einfangen“? (Je größer, desto besser). \\
+\end{tabular}
+
+\subsection{Gütemaße: $R^2$ und RSE}
+Wie fassen wir diese Variationen nun in einer verständlichen Kennzahl zusammen?
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Das Bestimmtheitsmaß ($R^2$)}\\
+    Das $R^2$ ist die wohl wichtigste Kennzahl für die Kommunikation von Ergebnissen.
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item \textbf{Formel:} $R^2 = 1 - \frac{RSS}{TSS} 
+            \quad \text{(oder alternativ } 
+            \frac{ESS}{TSS}\text{)}$
+        \item \textbf{Wertebereich:} 0 bis 1 (oder 0\% bis 100\%).
+        \item \textbf{Interpretation:} Gibt den \textbf{Anteil der Variation} an, der durch das Modell erklärt wird.
+        \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+            \item \textit{Beispiel:} $R^2 = 0.62$ bedeutet: „62\% der Unterschiede in der Lebenserwartung werden durch die Mortalität erklärt.“
+        \end{itemize}
+    \end{itemize}
+    \textbf{Ist ein hohes $R^2$ immer gut? (Prüfungsfalle!)}  \\
+    Nicht zwingend.
+    \begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item \textbf{Kontextabhängig:}  
+        In der Physik erwarten wir $R^2 > 0.95$.  
+        In Sozialwissenschaften oder bei echtem Nutzerverhalten („Noisy Real-World Data“) ist oft schon $R^2 > 0.20$ gut.
+        \item \textbf{Overfitting:}  
+        Ein extrem hohes $R^2$ kann bedeuten, dass das Modell den Zufall mitlernt, statt den Trend.
+    \end{enumerate}
+    \item \textbf{Residual Standard Error (RSE)}\\
+    Während $R^2$ eine Prozentzahl ist, gibt der RSE den Fehler in der \textbf{Einheit der Daten} an.
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item \textbf{Formel:} $RSE = \sqrt{\frac{RSS}{n - 2}}$
+        \item \textbf{Interpretation:}  
+        Die \textbf{typische Abweichung} eines Datenpunkts von der Regressionsgeraden.
+        \item \textbf{Freiheitsgrade:}  
+        Wir teilen durch $n - 2$, weil wir für die Berechnung bereits 2 Parameter ($\beta_0$ und $\beta_1$) aus den Daten geschätzt haben.  
+        Das kostet uns 2 Freiheitsgrade.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Modellannahmen}
+Damit wir den Ergebnissen einer linearen Regression (und vor allem den p-Werten und Konfidenzintervallen) vertrauen können, müssen vier zentrale Annahmen erfüllt sein. Wenn diese verletzt sind, ist das Modell unzuverlässig.
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Unabhängigkeit}: Die Fehler (Residuen) dürfen nichts miteinander zu tun haben (keine Muster entlang der Zeit oder Reihenfolge).
+    \item \textbf{Linearität}: Der Zusammenhang zwischen X und Y muss tatsächlich linear sein. Die Residuen sollten zufällig um 0 streuen.
+    \item \textbf{Homoskedastizität (Gleiche Varianz)}: Die Streuung der Fehler muss über den gesamten Bereich der Vorhersage gleich bleiben (keine Trichterform).
+    \item \textbf{Normalität}: Die Residuen sollten annähernd normalverteilt sein (wichtig für t-Tests und Inferenz).
+\end{enumerate}
+
+\subsection{Diagnoseplots}
+Wir nutzen drei Haupt-Plots, um diese Annahmen zu prüfen. Du musst in der Lage sein, "schlechte" Plots zu erkennen.
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Residuen-vs-Fit Plot}\\
+    Hier werden die Residuen ($y$-Achse) gegen die vorhergesagten Werte ($\hat{y}$, $x$-Achse) geplottet.
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item \textbf{Ideal:} Eine zufällige Punktewolke („Sternenhimmel“) ohne Struktur um die 0-Linie.
+        \item \textbf{Problem 1: Nichtlinearität:}  
+        Die Punkte bilden eine \textbf{Kurve} (z.\,B. Parabel/U-Form).  
+        $\rightarrow$ Das lineare Modell passt nicht.
+        \item \textbf{Problem 2: Heteroskedastizität:}  
+        Die Punkte bilden einen \textbf{Trichter} (werden nach rechts immer breiter).  
+        Das heißt: bei großen Werten macht das Modell größere Fehler.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.45\linewidth]{img/QQResiduen.png}
+        \end{figure}
+    \end{itemize}
+    \item \textbf{QQ-Plot (Normal Probability Plot)}\\
+    Prüft die \textbf{Normalverteilung} der Residuen.
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item \textbf{x-Achse:} Theoretische Quantile (was wir bei perfekter Normalverteilung erwarten).
+        \item \textbf{y-Achse:} Beobachtete Quantile (unsere echten Residuen).
+        \item \textbf{Ideal:} Alle Punkte liegen auf der roten Diagonalen.
+        \item \textbf{Problem:} Punkte weichen stark ab, bilden eine S-Form oder Kurve  
+        $\rightarrow$ Keine Normalverteilung (z.\,B. „Heavy Tails“ / Ausreißer).
+    \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.7\linewidth]{img/QQResiduenNN.png}
+        \end{figure}
+    \item \textbf{Cook's Distance}\\
+    Identifiziert \textbf{einflussreiche Punkte}, die das Modell verzerren könnten.\\
+    \textbf{Kombination aus:}
+    \begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Größe des Residuums (Wie falsch liegt der Punkt?).
+        \item Leverage (Wie extrem ist der $x$-Wert? Liegt er weit außen?).
+    \end{enumerate}  
+    Hohe Balken zeigen Punkte, die die Regressionsgerade „zu sich ziehen“.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\linewidth]{img/CooksDistance.png}
+    \end{figure}
+\end{enumerate}
+
+\subsection{Grenzen der Regression}
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Keine Kausalität beweisen}: Nur weil X und Y korrelieren, heißt das nicht, dass X Ursache für Y ist.
+    \item \textbf{Keine automatische Bereinigung}: Ausreißer werden nicht automatisch ignoriert (OLS ist anfällig für sie!).
+    \item \textbf{Komplexe Zusammenhänge}: Starke Nichtlinearitäten werden durch eine Gerade falsch dargestellt.
+\end{enumerate}
 
 \input{text/glossar}
 \end{document}

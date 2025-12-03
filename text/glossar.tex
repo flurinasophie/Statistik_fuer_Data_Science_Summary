@@ -244,9 +244,9 @@ $\rightarrow$ PDF: Probability Density Function (Wahrscheinlichkeitsdichtefunkti
 PDF: Probability Density Function (Wahrscheinlichkeitsdichtefunktion): $f(x) \ge 0 \quad \text{und} \quad \int f(x)\,dx = 1$\\
 CDF: Cumulative Distribution Function (Kumulative Verteilungsfunktion): $F(x) = Pr(X \le x) = \int_{-\infty}^{x} f(z)\,dz$
 
-\section{Schätzen \& Konfindenzintervalle}
+\subsection{Schätzen \& Konfindenzintervalle}
 
-\subsection{Population}
+\subsubsection{Population}
 die Gesamtheit, über die du etwas wissen willst.\\
 Sie hat feste, aber unbekannte Kennzahlen = Parameter:
 \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
@@ -255,7 +255,7 @@ Sie hat feste, aber unbekannte Kennzahlen = Parameter:
   \item (wahrer) Anteil / Wahrscheinlichkeit: $\rho$
 \end{itemize}
 
-\subsection{Stichprobe}
+\subsubsection{Stichprobe}
 die Teilmenge, die du tatsächlich misst/befragst.\\
 \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
   \item Größe der Stichprobe: n
@@ -277,6 +277,63 @@ die Teilmenge, die du tatsächlich misst/befragst.\\
 \textbf{Großbuchstaben} $\rightarrow$ Zufallsvariablen (theoretisch, „über viele Stichproben“ gedacht).\\
 \textbf{Kleinbuchstaben} $\rightarrow$ Konkrete Beobachtungen aus einer Stichprobe.\\
 Ideal: zufällig, unabhängig, repräsentativ
+
+\subsection{Zentrale Regressionsbegriffe}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{Regression}: Modell, das beschreibt, wie sich $Y$ verändert, wenn sich $X$ verändert.
+  \item \textbf{Prädiktor / Kovariate ($X$)}: Die erklärende Variable im Regressionsmodell.
+  \item \textbf{Antwortvariable ($Y$)}: Die Zielgröße, die modelliert oder vorhergesagt werden soll.
+  \item \textbf{Lineares Modell}: $Y = \beta_0 + \beta_1 X + \epsilon$
+  \item \textbf{Achsenabschnitt ($\beta_0$)}: Der erwartete Wert von $Y$, wenn $X=0$.
+  \item \textbf{Steigung ($\beta_1$)}: Die Veränderung von $Y$ pro Einheit $X$ (ceteris paribus).
+  \item \textbf{Residuum ($e_i$)}: Die Differenz zwischen dem tatsächlich beobachteten Wert und dem vorhergesagten Wert: $e_i = y_i - \hat{y}_i$.
+\end{itemize}
+
+\subsection{Gütemasse \& Zerlegung (Regression)}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{RSS (Residual Sum of Squares)}: Summe der quadrierten Residuen: $RSS = \sum(y_i - \hat{y}_i)^2$\\
+  Maß für die \textbf{unerklärte Variation}; je kleiner, desto besser.
+  \item \textbf{TSS (Total Sum of Squares)}: Gesamte Variation von $Y$ um den Mittelwert: $TSS = \sum(y_i - \bar{y})^2$
+  \item \textbf{ESS (Explained Sum of Squares)}: Erklärte Variation des Modells: $ESS = \sum(\hat{y}_i - \bar{y})^2$\\
+  Je größer, desto informativer das Modell.
+  \item \textbf{Zerlegung}: Die Gesamtvariation zerfällt in erklärte und unerklärte Anteile $\rightarrow$ $TSS = ESS + RSS$
+  \item \textbf{Bestimmtheitsmaß ($R^2$)}: Anteil der erklärten Variation an der Gesamtvariation.\\
+  $R^2 = 1 - \frac{RSS}{TSS} = \frac{ESS}{TSS}$\\
+  Wertebereich 0 bis 1.
+  \item \textbf{RSE (Residual Standard Error)}: Typische Abweichung eines Punktes von der Geraden.\\
+  $RSE = \sqrt{\frac{RSS}{n-2}}$
+\end{itemize}
+
+\subsection{Modellannahmen}
+Zentrale Annahmen der einfachen linearen Regression:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{Linearität}: Der Zusammenhang zwischen $X$ und $Y$ ist (annähernd) linear.
+  \item \textbf{Unabhängigkeit}: Fehler / Residuen sind unabhängig voneinander (keine Zeit-/Reihenfolgemuster).
+  \item \textbf{Homoskedastizität}: Die Varianz der Residuen ist für alle $\hat{y}$ etwa gleich (konstante Streuung).
+  \item \textbf{Normalität der Fehler}: Die Residuen sind (annähernd) normalverteilt.
+\end{itemize}
+\textbf{Konsequenzen}: Verletzte Annahmen $\rightarrow$ verzerrte Standardfehler, Tests und Konfidenzintervalle.
+
+\subsection{Diagnoseplots}
+Wichtige grafische Werkzeuge zur Überprüfung der Modellannahmen:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{Residuen-vs-Fit}: Plottet Residuen gegen $\hat{y}$.\\
+  Zeigt Muster (Nichtlinearität), Trichterform (Heteroskedastizität) oder Ausreißer.
+  \item \textbf{QQ-Plot}: Plottet Residuen-Quantile gegen Normal-Quantile.\\
+  Punkte auf der Diagonale $\rightarrow$ Normalität plausibel.\\
+  S-Form oder starke Krümmung $\rightarrow$ Abweichung (z. B. Heavy Tails).
+  \item \textbf{Cook's Distance}: Misst den Einfluss einzelner Punkte auf das Modell (Kombination aus Leverage und Residuum).
+\end{itemize}
+
+\subsection{Einfluss \& Leverage}
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+  \item \textbf{Leverage (Hebelwirkung)}: Maß dafür, wie weit eine Beobachtung im X-Raum vom „Zentrum“ liegt.\\
+  Hohe Leverage-Punkte (extreme $x_i$) können die Regressionsgerade stark anziehen.
+  \item \textbf{Einflussreicher Punkt}: Eine Beobachtung, die die geschätzte Gerade stark verändert (Kombination aus hohem Leverage und großem Residuum).
+  \item \textbf{Cook's Distance ($D_i$)}: Kombinierte Kennzahl für Einfluss.\\
+  Große Werte $\rightarrow$ Punkt hat starken Einfluss auf die Schätzung.\\
+  \textbf{Faustregel}: $D_i > 4/n$ genauer prüfen.
+\end{itemize}
 
 
 
