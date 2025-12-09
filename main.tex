@@ -1716,6 +1716,205 @@ Wir nutzen drei Haupt-Plots, um diese Annahmen zu prüfen. Du musst in der Lage 
     \item \textbf{Komplexe Zusammenhänge}: Starke Nichtlinearitäten werden durch eine Gerade falsch dargestellt.
 \end{enumerate}
 
+\section{Multiple Regression}
+Die Statistik für Data Science lässt sich grob in drei Phasen unterteilen, wobei wir uns nun in der prädiktiven Modellierung befinden:
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Explorative Phase (Deskriptive Statistik)}: Daten beschreiben und verstehen (Verteilungen, Ausreisser).
+    \item \textbf{Unsicherheitsphase (Inferenzstatistik)}: Schätzen und Entscheiden (Standardfehler, Konfidenzintervalle, Hypothesentests).
+    \item \textbf{Modellierungsphase (Prädikative Statistik)}: Zusammenhänge modellieren und Vorhersagen treffen.
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Bisher: Einfache Regression (1 Prädiktor).
+        \item Neu: Multiple Regression (mehrere Prädiktoren), Dummy-Codierung, Umgang mit Konfundierung und Panelmodelle.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Multiple Lineare Regression}
+Die einfache lineare Regression ($Y = \beta_0 + \beta_1 X$) ist oft zu simpel für die Realität, da meist mehrere Faktoren eine Zielgrösse beeinflussen.\\
+Wir erweitern die Gleichung um weitere Prädiktoren\\ $X_2, X_3, \ldots, X_k\text{: } Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_k X_k + \varepsilon$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $Y$: Abhängige Variable (Zielgrösse).
+    \item $X_1, \ldots, X_k$: Unabhängige Variablen (Prädiktoren).
+    \item $\beta_0$: Achsenabschnitt (Intercept) – Wert von $Y$, wenn alle $X_i = 0$.
+    \item $\beta_1, \ldots, \beta_k$: Partielle Regressionskoeffizienten.
+    \item $\varepsilon$: Fehlerterm (Residuum).
+\end{itemize}
+
+\subsubsection{Interpretation der Koeffizienten (Ceteris Paribus)}
+In der multiplen Regression ändert sich die Interpretation der Steigungskoeffizienten entscheidend:
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $\beta_j$: Die Veränderung von $Y$, wenn $X_j$ um eine Einheit steigt, \textit{während alle anderen Prädiktoren konstant gehalten werden} (ceteris paribus).
+    \begin{itemize}
+        \item \textit{Beispiel}: Einfluss der Wohnfläche auf den Preis, \textit{bei gleicher Lage und gleichem Baujahr}.
+    \end{itemize}
+    \item Dies isoliert den "bereinigten" Effekt einer Variablen.
+\end{itemize}
+
+\subsubsection{Warum Multiple Regression? (Vorteile)}
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Erklärungskraft erhöhen ($R^2$)}: Mehr relevante Infos führen zu besseren Vorhersagen.
+    \item \textbf{Konfundierung kontrollieren}: Wir können den Einfluss von Störvariablen (Z) herausrechnen, um den "wahren" Effekt von X auf Y zu isolieren (verhindert Simpson-Paradox).
+    \item \textbf{Genauere Schätzungen}: Der Standardfehler der Koeffizienten kann sinken, wenn Rauschen durch andere Variablen erklärt wird.
+\end{enumerate}
+
+\subsubsection{Adjusted $R^2$ (Das korrigierte Bestimmtheitsmass)}
+Das normale $R^2$ steigt \textit{immer}, wenn man eine neue Variable hinzufügt – selbst wenn diese sinnlos ist (Overfitting-Gefahr).
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Lösung}: Adjusted $R^2$ ($R^2_{\text{adj}}$).
+    \item Es bestraft Komplexität: Es steigt nur, wenn der neue Prädiktor das Modell stärker verbessert, als durch reinen Zufall zu erwarten wäre.
+    \item \textbf{Formel}: 
+   $ R^2_{\text{adj}} = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}$
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item ($n =$ Anzahl Beobachtungen, $k =$ Anzahl Prädiktoren).
+    \end{itemize}
+    \item \textbf{Nutzung}: Zum Vergleich von Modellen mit unterschiedlich vielen Variablen.
+\end{itemize}
+
+\section{Dummy-Codierung}
+Bisher waren unsere Prädiktoren meist kontinuierlich (z. B. Wohnfläche). Wie bauen wir kategoriale Variablen (z. B. „Stadt“: Zürich, Genf, Bern) in die Regression ein?\\
+Computer können nicht mit Text rechnen. Wir wandeln Kategorien in binäre 0/1-Variablen um, sogenannte Dummy-Variablen.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Regel}: Für eine Variable mit k Kategorien benötigen wir $k-1$ Dummies.
+    \item \textbf{Referenzkategorie}: Die Kategorie, die keine eigene Dummy-Variable bekommt (sie ist dann 0 in allen anderen Dummies). Sie dient als Basisvergleich.
+\end{itemize}
+Nehmen wir ein Modell für Hauspreise mit der kategorialen Variable \textit{Lage} (Kategorien: \textit{Stadt, Land}). Wir wählen \textit{Land} als Referenz.\\
+$Y = \beta_0 + \beta_1 \cdot \text{Wohnfläche} + \beta_2 \cdot \text{Stadt\_Dummy} + \varepsilon$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Stadt\_Dummy}: Ist 1, wenn das Haus in der Stadt liegt, sonst 0.
+    \item $\beta_0$ \textbf{(Intercept)}: Preis eines Hauses auf dem \textit{Land} (Referenz), wenn Wohnfläche $= 0$.
+    \item $\beta_2$ \textbf{(Dummy-Koeffizient)}: Der \textit{Niveauunterschied}. Er zeigt, wie viel teurer ein Haus in der Stadt im Vergleich zum Land ist, \textit{bei gleicher Wohnfläche} (ceteris paribus).
+    \begin{itemize}
+        \item Ist $\beta_2$ signifikant positiv $\rightarrow$ Stadt ist teurer als Land.
+    \end{itemize}
+\end{itemize}
+\textbf{Achtung "Dummy Trap"}: Würden wir für \textit{alle} $k$ Kategorien eine Dummy-Variable erstellen, entstünde perfekte Multikollinearität (siehe unten), und das Modell wäre nicht mehr berechenbar.
+
+\subsection{Multikollinearität \& Konfundierung}
+
+\subsubsection{Konfundierung (Omitted Variable Bias)}
+Ein häufiges Problem: Wir lassen eine wichtige Variable $Z$ weg, die sowohl $X$ als auch $Y$ beeinflusst.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Folge}: Der Effekt von $Z$ wird fälschlicherweise X zugeschrieben. Der Koeffizient von $X$ ist verzerrt (biased).
+    \item \textbf{Lösung}: Aufnahme der Störvariable in die multiple Regression kontrolliert diesen Effekt ("Herausrechnen").
+\end{itemize}
+
+\subsubsection{Multikollinearität (Redundanz)}
+Tritt auf, wenn zwei oder mehr Prädiktoren sehr stark miteinander korrelieren (z.~B. \textit{Wohnfläche in $m^2$} und \textit{Wohnfläche in ft$^2$}, oder \textit{Alter} und \textit{Berufserfahrung}).
+
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Das Problem}: Das Modell kann nicht mehr unterscheiden, welcher Prädiktor für die Änderung in $Y$ verantwortlich ist.
+    \begin{itemize}
+        \item $R^2$ ist oft hoch (Modell erklärt viel), aber ...
+        \item ... die einzelnen p-Werte sind hoch (nicht signifikant), weil die Standardfehler der Koeffizienten „aufgebläht“ werden.
+    \end{itemize}
+    \item \textbf{Diagnose: VIF (Variance Inflation Factor)}
+\end{itemize}
+$VIF_j = \frac{1}{1 - R_j^2}$\\
+Hierbei ist $R_j^2$ das Bestimmtheitsmass einer Regression, bei der Prädiktor $X_j$ durch alle anderen Prädiktoren erklärt wird.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Faustregel}: $VIF > 5$ (manchmal $> 10$) deutet auf problematische Multikollinearität hin.
+    \item \textbf{Lösung}: Einen der korrelierten Prädiktoren entfernen oder Variablen zusammenfassen.
+\end{itemize}
+\textbf{Was tun bei Multikollinearität?}
+Wenn du einen hohen VIF feststellst, gibt es drei Hauptstrategien:
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Variable entfernen}: Entferne den Prädiktor mit dem höchsten VIF (oder jenen, der theoretisch weniger relevant ist)
+    \item \textbf{Variablen zusammenfassen (Feature Engineering)}: Wenn zwei Variablen fast das Gleiche messen (z. B. "Kundenzufriedenheit Umfrage 1" und "Kundenzufriedenheit Umfrage 2"), bilde einen Mittelwert oder Score aus beiden.
+    \item \textbf{Datenmenge erhöhen ($n$ vergrössern)}: Multikollinearität ist oft ein Problem von zu wenigen Daten ("Micronumerosity"). Mehr Daten verringern die Standardfehler, auch wenn die Korrelation bestehen bleibt (in der Praxis aber oft schwer umsetzbar).
+\end{enumerate}
+
+
+\subsubsection{VIF: Variance Inflation Factor}
+Der Variance Inflation Factor ($VIF_j$) gibt an, um welchen Faktor die Varianz (und damit das Quadrat des Standardfehlers) eines Regressionskoeffizienten aufgebläht wird, nur weil dieser Prädiktor mit anderen korreliert.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $VIF = 1$: Keine Multikollinearität (Idealfall). Die Variable ist unabhängig von allen anderen Prädiktoren.
+    \item $1 < VIF < 5$: Moderate Korrelation. In der Regel unproblematisch.
+    \item $VIF > 5$: Starke Multikollinearität. Die Schätzungen werden ungenau, p-Werte sind oft nicht vertrauenswürdig.
+    \item $VIF > 10$: Kritische Multikollinearität. Das Modell ist instabil; es besteht dringender Handlungsbedarf.
+\end{itemize}
+
+\section{Panelmodelle}
+Bisher haben wir meist Querschnittsdaten betrachtet (viele Beobachtungen zu einem Zeitpunkt, z. B. Immobilienpreise 2024). In der Realität wollen wir aber oft Entwicklungen über die Zeit verstehen.\\
+\textbf{Paneldaten} kombinieren \textbf{Querschnitt} (viele Einheiten) und Zeitreihe (Entwicklung über die Zeit). Wir beobachten dieselben Einheiten (Entities) wiederholt.
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Struktur}: Einheit $i$ zum Zeitpunkt $t$.
+    \item \textbf{Notation}: $Y_{it}$
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item $i = 1, \ldots, N$ (Einheiten, z.~B. Länder, Firmen, Personen)
+        \item $t = 1, \ldots, T$ (Zeitpunkte, z.~B. Jahre, Quartale, Tage)
+    \end{itemize}
+\end{itemize}
+
+\subsection{Die zwei Arten der Variation}
+Bei Paneldaten gibt es zwei Quellen, warum sich Daten unterscheiden können. Das Verständnis dieser Unterscheidung ist zentral:
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Between-Variation (Zwischen den Einheiten)}:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Unterschiede zwischen den Subjekten.
+        \item \textit{Beispiel}: "Die Schweiz ist im Durchschnitt reicher als Portugal."
+        \item Dies sind oft langfristige, strukturelle Unterschiede (Kultur, Geografie).
+    \end{itemize}
+    \item \textbf{Within-Variation (Innerhalb der Einheit)}:
+    \begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+        \item Veränderungen einer Einheit über die Zeit.
+        \item \textit{Beispiel}: "Die Schweiz ist 2022 reicher geworden im Vergleich zur Schweiz 2021."
+        \item Dies zeigt die Dynamik und wie eine Einheit auf Veränderungen reagiert.
+    \end{itemize}
+\end{enumerate}
+\textbf{Warum ist das wichtig?}\\ Wenn wir einfach eine normale Regression über alle Daten machen (Pooled OLS), vermischen wir diese beiden Effekte. Das führt oft zu falschen Schlüssen (vergleichbar mit dem Simpson-Paradox).
+
+\subsection{Das Fixed Effects (FE) Modell}
+Das \textbf{Fixed Effects Modell} ist der Standardansatz in der Ökonometrie und Data Science, um mit Paneldaten zu arbeiten. Es nutzt primär die \textit{Within-Variation}.\\
+$Y_{it} = \beta_1 X_{it} + \alpha_i + \epsilon_{it}$
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item $\beta_1 X_{it}$: Der Effekt der Variable $X$ (wie gewohnt).
+    \item $\alpha_i$ (\textbf{Der Fixed Effect}): Das ist der Trick! Jede Einheit $i$ bekommt ihren eigenen, individuellen Achsenabschnitt (Intercept).
+    \item $\epsilon_{it}$: Der verbleibende Fehlerterm.
+\end{itemize}
+\textbf{Was leistet das Modell ($\alpha_i$)?}  \\
+Das $\alpha_i$ fängt \textbf{alle Eigenschaften einer Einheit} auf, die sich über die Zeit nicht ändern (zeit-invariant), selbst wenn wir diese gar nicht gemessen haben!
+\begin{itemize}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textit{Beispiel Länder}: Das Modell kontrolliert automatisch für Geografie, Klima, Geschichte oder Kultur eines Landes.
+    \item \textit{Beispiel Personen}: Es kontrolliert für genetische Veranlagung oder Intelligenz (sofern konstant).
+\end{itemize}
+\textbf{Vorteile des FE-Modells:}
+\begin{enumerate}[itemsep=0.4em, topsep=0.4em, parsep=0em, labelsep=0.5em, leftmargin=*, align=parleft]
+    \item \textbf{Eliminierung von Omitted Variable Bias}:  
+    Wir müssen uns keine Sorgen machen, dass wir zeit-konstante Störvariablen vergessen haben. Das Modell „rechnet sie heraus“.
+
+    \item \textbf{Fokus auf Veränderung}:  
+    Es beantwortet die Frage:  
+    \textit{„Wenn $X$ für eine bestimmte Einheit steigt, wie verändert sich dann $Y$ für diese Einheit?“}
+\end{enumerate}
+
+\subsubsection{Vergleich: OLS vs. Fixed Effects}
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3.2cm} p{6cm} p{6cm}}
+\textbf{Merkmal} & \textbf{Pooled OLS (Normale Regression)} & \textbf{Fixed Effects (FE) Modell} \\[6pt]
+\textbf{Gleichung} &
+$Y_{it} = \beta_0 + \beta_1 X_{it} + \epsilon$
+ &
+$Y_{it} = \alpha_i + \beta_1 X_{it} + \epsilon_{it}$
+ \\[10pt]
+\textbf{Annahme} &
+Alle Einheiten sind „gleich“; keine individuelle Heterogenität. &
+Jede Einheit hat ein eigenes Niveau ($\alpha_i$). \\[10pt]
+\textbf{Umgang mit } $\alpha_i$ &
+Ignoriert ($\alpha_i$ landet im Fehlerterm). &
+Schätzt oder eliminiert $\alpha_i$. \\[10pt]
+\textbf{Gefahr} &
+\textbf{Omitted Variable Bias} (sehr hoch), wenn individuelle Merkmale mit $X$ korrelieren. &
+Keine Verzerrung durch zeitinvariante Störvariablen. \\[10pt]
+\textbf{Interpretation} &
+Vermischt Äpfel \& Birnen (Between \& Within). &
+Vergleicht nur „Äpfel mit sich selbst“ (Only Within). \\[10pt]
+\textbf{Nachteil} &
+Ergebnisse oft falsch/verzerrt. &
+Kann Einfluss von konstanten Variablen (z.\,B. Geschlecht, Lage) nicht messen. \\
+\end{tabular}
+\end{table}
+
+
 \input{text/glossar}
 \end{document}
 
